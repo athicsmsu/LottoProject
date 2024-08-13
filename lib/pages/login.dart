@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12),
                       child: Text(
-                        'รหัสผ่าน',
+                        'รหัสผ่าน**',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
