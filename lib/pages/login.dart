@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12),
                       child: Text(
-                        'รหัสผ่าน**',
+                        'รหัสผ่าน',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -129,44 +129,47 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          register();
-                        },
-                        child: const Text('สมัครสมาชิก',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF54B799),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1))),
-                    FilledButton(
-                        onPressed: () => login(),
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                              const Size(160, 44)), // กำหนดขนาดของปุ่ม
-                          backgroundColor: MaterialStateProperty.all(
-                              const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                          shape:
-                              MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(25.0), // ทำให้ขอบมน
-                          )),
-                        ),
-                        child: const Text('เข้าสู่ระบบ',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFFFFFFF),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1))),
-                  ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            register();
+                          },
+                          child: const Text('สมัครสมาชิก',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF54B799),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1))),
+                      FilledButton(
+                          onPressed: () => login(),
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                                const Size(160, 44)), // กำหนดขนาดของปุ่ม
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
+                            shape:
+                                MaterialStateProperty.all(RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(25.0), // ทำให้ขอบมน
+                            )),
+                          ),
+                          child: const Text('เข้าสู่ระบบ',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFFFFFFF),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1))),
+                    ],
+                  ),
                 ),
               ),
               TextButton(

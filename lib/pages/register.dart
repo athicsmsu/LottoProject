@@ -255,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.only(left: 42,right: 42,top: 42),
+                    const EdgeInsets.only(left: 42,right: 42,top: 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
