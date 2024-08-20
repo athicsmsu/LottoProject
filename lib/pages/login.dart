@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/forgotpassword.dart';
 import 'package:lotto_application/pages/register.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_application/pages/user/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -201,6 +202,11 @@ class _LoginPageState extends State<LoginPage> {
 
   login() {
     log("login");
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainUserPage(),
+        ));
   }
 
   forgotPassword() {
