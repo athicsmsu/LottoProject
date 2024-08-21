@@ -2,7 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
+import 'package:lotto_application/pages/user/cash.dart';
+import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
+import 'package:lotto_application/pages/user/profile.dart';
+import 'package:lotto_application/pages/user/reward.dart';
 
 class MainUserPage extends StatefulWidget {
   const MainUserPage({super.key});
@@ -13,7 +17,9 @@ class MainUserPage extends StatefulWidget {
 
 class _MainUserPageState extends State<MainUserPage> {
   int numnews = 1;
-
+  String nummoney = '21.00';
+  String hideMoneytxt = 'ซ่อนยอดเงิน';
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -90,7 +96,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
                           icon: const Icon(
@@ -175,13 +181,13 @@ class _MainUserPageState extends State<MainUserPage> {
                       borderRadius: BorderRadius.circular(8.0), // ทำให้ขอบมน
                       color: const Color(0xFFD9D9D9), // กำหนดสีพื้นหลัง
                     ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.5, horizontal: 15),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5.5, horizontal: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -208,29 +214,41 @@ class _MainUserPageState extends State<MainUserPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                '21.00',
-                                style: TextStyle(
+                                nummoney,
+                                style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF1E1E1E),
                                     fontFamily: "Prompt",
                                     letterSpacing: 1),
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'ซ่อนยอดเงิน',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF00A950),
-                                        fontFamily: "Prompt",
-                                        letterSpacing: 1),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Icon(Icons.remove_red_eye_outlined,
-                                      color: Color(0xFF00A950))
-                                ],
+                              GestureDetector(
+                                onTap: () {
+                                  if (nummoney != "XX.XX") {
+                                    nummoney = "XX.XX";
+                                    hideMoneytxt = "ดูยอดเงิน";
+                                  } else {
+                                    nummoney = "21.00";
+                                    hideMoneytxt = "ซ่อนยอดเงิน";
+                                  }
+                                  setState(() {});
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      hideMoneytxt,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF00A950),
+                                          fontFamily: "Prompt",
+                                          letterSpacing: 1),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.remove_red_eye_outlined,
+                                        color: Color(0xFF00A950))
+                                  ],
+                                ),
                               ),
                             ],
                           )
@@ -360,92 +378,164 @@ class _MainUserPageState extends State<MainUserPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 2.5),
-             width: 400,
-             height: 70,
-              // ignore: sort_child_properties_last
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Icon(Icons.home,size: 40,),
-                      Text(
-                        'หน้าหลัก',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF555555),
-                            fontFamily: "Prompt",
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.emoji_events,
-                        size: 40,
-                      ),
-                      Text(
-                        'รางวัล',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF555555),
-                            fontFamily: "Prompt",
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.local_activity_sharp,
-                        size: 60,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.attach_money,
-                        size: 40,
-                      ),
-                      Text(
-                        'ขึ้นเงิน',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF555555),
-                            fontFamily: "Prompt",
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 40,
-                      ),
-                      Text(
-                        'โปรไฟล์์',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF555555),
-                            fontFamily: "Prompt",
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2.5),
+              width: 400,
+              height: 70,
               decoration: const BoxDecoration(
                 color: Color(0xFFD9D9D9), // สีพื้นหลัง
                 borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16)), // ขอบมนที่ด้านบน
+                  top: Radius.circular(16),
+                ), // ขอบมนที่ด้านบน
+              ),
+              child: Stack(
+                clipBehavior:
+                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        children: [
+                          Icon(
+                            Icons.home,
+                            size: 40,
+                            color: Color(0xFF54B799),
+                          ),
+                          Text(
+                            'หน้าหลัก',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF54B799),
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RewardPage(),
+                            ),
+                          );
+                        },
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.emoji_events,
+                              size: 40,
+                              color: Color(0xFF555555),
+                            ),
+                            Text(
+                              'รางวัล',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF555555),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // ช่องว่างสำหรับตรงกลาง
+                      const SizedBox(
+                          width: 80), // เว้นช่องว่างตรงกลางสำหรับไอคอนใหญ่
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CashPage(),
+                            ),
+                          );
+                        },
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.attach_money,
+                              size: 40,
+                              color: Color(0xFF555555),
+                            ),
+                            Text(
+                              'ขึ้นเงิน',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF555555),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        },
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Color(0xFF555555),
+                            ),
+                            Text(
+                              'โปรไฟล์',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF555555),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
+                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LottoPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF777777),
+                          border: Border.all(
+                            color: const Color(0xFF666666),
+                            width: 5, // ขนาดของเส้นขอบ
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
+                          child: Icon(
+                            Icons.local_activity_sharp,
+                            size: 50,
+                            color:
+                                Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

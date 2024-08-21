@@ -3,16 +3,16 @@ import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/cash.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
-import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/pages/user/profile.dart';
 
-class MoneyPage extends StatefulWidget {
-  const MoneyPage({super.key});
+class RewardPage extends StatefulWidget {
+  const RewardPage({super.key});
 
   @override
-  State<MoneyPage> createState() => _MoneyPageState();
+  State<RewardPage> createState() => _RewardPageState();
 }
 
-class _MoneyPageState extends State<MoneyPage> {
+class _RewardPageState extends State<RewardPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -85,7 +85,10 @@ class _MoneyPageState extends State<MoneyPage> {
                   top: Radius.circular(16),
                 ), // ขอบมนที่ด้านบน
               ),
-              child:
+              child: Stack(
+                clipBehavior:
+                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
+                children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -117,33 +120,23 @@ class _MoneyPageState extends State<MoneyPage> {
                           ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RewardPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.emoji_events,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'รางวัล',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
+                      const Column(
+                        children: [
+                          Icon(
+                            Icons.emoji_events,
+                            size: 40,
+                            color: Color(0xFF54B799),
+                          ),
+                          Text(
+                            'รางวัล',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF54B799),
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
+                        ],
                       ),
                       // ช่องว่างสำหรับตรงกลาง
                       const SizedBox(
@@ -176,27 +169,71 @@ class _MoneyPageState extends State<MoneyPage> {
                           ],
                         ),
                       ),
-                      const Column(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Color(0xFF54B799),
-                          ),
-                          Text(
-                            'โปรไฟล์',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF54B799),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        },
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Color(0xFF555555),
+                            ),
+                            Text(
+                              'โปรไฟล์',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF555555),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                
+                  Positioned(
+                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
+                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LottoPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF777777),
+                          border: Border.all(
+                            color: const Color(0xFF666666),
+                            width: 5, // ขนาดของเส้นขอบ
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
+                          child: Icon(
+                            Icons.local_activity_sharp,
+                            size: 50,
+                            color:
+                                Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ]),

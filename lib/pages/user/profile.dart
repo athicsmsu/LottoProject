@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/cash.dart';
@@ -5,14 +7,14 @@ import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/reward.dart';
 
-class MoneyPage extends StatefulWidget {
-  const MoneyPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<MoneyPage> createState() => _MoneyPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _MoneyPageState extends State<MoneyPage> {
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -85,12 +87,15 @@ class _MoneyPageState extends State<MoneyPage> {
                   top: Radius.circular(16),
                 ), // ขอบมนที่ด้านบน
               ),
-              child:
+              child: Stack(
+                clipBehavior:
+                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
+                children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
+                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -196,7 +201,41 @@ class _MoneyPageState extends State<MoneyPage> {
                       ),
                     ],
                   ),
-                
+                  Positioned(
+                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
+                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LottoPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFF777777),
+                          border: Border.all(
+                            color: const Color(0xFF666666),
+                            width: 5, // ขนาดของเส้นขอบ
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
+                          child: Icon(
+                            Icons.local_activity_sharp,
+                            size: 50,
+                            color:
+                                Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ]),

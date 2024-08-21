@@ -12,7 +12,6 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  
   TextEditingController emailCtl = TextEditingController();
 
   @override
@@ -90,7 +89,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               borderRadius: BorderRadius.circular(8.0))),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 42, vertical: 42),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
