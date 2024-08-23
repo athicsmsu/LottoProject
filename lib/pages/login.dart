@@ -57,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
                         child: Image.asset('assets/images/LottoLogo.jpg',
                             width: 160, // กำหนดความกว้างของรูปภาพ
                             height: 160, // กำหนดความสูงของรูปภาพ
-                            fit: BoxFit.cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
+                            fit:
+                                BoxFit.cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
               ),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -156,8 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                                 const Size(160, 44)), // กำหนดขนาดของปุ่ม
                             backgroundColor: MaterialStateProperty.all(
                                 const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                            shape:
-                                MaterialStateProperty.all(RoundedRectangleBorder(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(25.0), // ทำให้ขอบมน
                             )),

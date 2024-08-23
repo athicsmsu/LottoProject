@@ -15,6 +15,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  TextEditingController nameCtl = TextEditingController();
+  TextEditingController emailCtl = TextEditingController();
+  TextEditingController phoneCtl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,10 +73,170 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
         body: Stack(children: [
-          SingleChildScrollView(
+           SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                      width: 180, // กำหนดความกว้าง
+                      height: 180,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFFD9D9D9), // สีของกรอบ
+                          width: 10, // ความหนาของกรอบ
+                        ),
+                      ),
+                      child: ClipOval(
+                          child: Image.asset('assets/images/LottoLogo.jpg',
+                              width: 160, // กำหนดความกว้างของรูปภาพ
+                              height: 160, // กำหนดความสูงของรูปภาพ
+                              fit: BoxFit
+                                  .cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            'ชื่อ - นามสกุล',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
+                        ),
+                        TextField(
+                          controller: nameCtl,
+                          keyboardType: TextInputType.name,
+                          style: const TextStyle(
+                            fontFamily:
+                                'Prompt', // เปลี่ยนฟอนต์ของข้อความใน TextField
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
+                          ),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xFFD9D9D9),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0))),
+                        ),
+                      ],
+                    )),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        child: Text(
+                          'อีเมล',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: "Prompt",
+                              letterSpacing: 1),
+                        ),
+                      ),
+                      TextField(
+                        controller: emailCtl,
+                        keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(
+                          fontFamily:
+                              'Prompt', // เปลี่ยนฟอนต์ของข้อความใน TextField
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                        ),
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xFFD9D9D9),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0))),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            'หมายเลขโทรศัพท์',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
+                        ),
+                        TextField(
+                          controller: phoneCtl,
+                          keyboardType: TextInputType.phone,
+                          style: const TextStyle(
+                            fontFamily:
+                                'Prompt', // เปลี่ยนฟอนต์ของข้อความใน TextField
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
+                          ),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xFFD9D9D9),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0))),
+                        ),
+                      ],
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30,bottom: 10),
+                  child: FilledButton(
+                      onPressed: () => save(),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(
+                            const Size(160, 44)), // กำหนดขนาดของปุ่ม
+                        backgroundColor: MaterialStateProperty.all(
+                            const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(25.0), // ทำให้ขอบมน
+                        )),
+                      ),
+                      child: const Text('บันทึก',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFFFFFFF),
+                              fontFamily: "Prompt",
+                              letterSpacing: 1))),
+                ),
+                TextButton(
+                  onPressed: () {
+                    ChangePassword();
+                  },
+                  child: const Text('เปลี่ยนรหัสผ่าน',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFFFFF),
+                        fontFamily: "Prompt",
+                        letterSpacing: 1,
+                      ))),
+              ],
             ),
           ),
           Align(
@@ -242,4 +407,12 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+  
+  save() {
+    log(nameCtl.text);
+    log(emailCtl.text);
+    log(phoneCtl.text);
+  }
+  
+  void ChangePassword() {}
 }

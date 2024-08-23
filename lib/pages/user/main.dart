@@ -5,6 +5,7 @@ import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/cash.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
+import 'package:lotto_application/pages/user/mylotto.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
 
@@ -96,7 +97,7 @@ class _MainUserPageState extends State<MainUserPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         IconButton(
                           icon: const Icon(
@@ -294,16 +295,25 @@ class _MainUserPageState extends State<MainUserPage> {
                         height: 40, // กำหนดความสูงของ Container
                         color: const Color(0xFF54B799), // กำหนดสีพื้นหลัง
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          'รายการของคุณ',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: "Prompt",
-                              letterSpacing: 1),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyLottoPage(),
+                              ));
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            'รายการของคุณ',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
                         ),
                       ),
                     ],
@@ -315,25 +325,11 @@ class _MainUserPageState extends State<MainUserPage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // ฟังก์ชันเมื่อกดปุ่ม
-                          log("Btn");
-                        },
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/LottoLogo.jpg',
-                            width: 70, // กำหนดความกว้างของรูปภาพ
-                            height: 70, // กำหนดความสูงของรูปภาพ
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // ฟังก์ชันเมื่อกดปุ่ม
-                          log("Btn");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyLottoPage(),
+                              ));
                         },
                         child: ClipOval(
                           child: Image.asset(
@@ -358,7 +354,11 @@ class _MainUserPageState extends State<MainUserPage> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            log("Add");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LottoPage(),
+                                ));
                           },
                           child: ClipOval(
                             child: Icon(

@@ -31,7 +31,7 @@ class _CashPageState extends State<CashPage> {
         ),
       ),
       home: Scaffold(
-        backgroundColor: const Color(0xFF024B3F),
+        backgroundColor: const Color(0xFFFFFFFF),
         appBar: AppBar(
           leading: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -69,7 +69,58 @@ class _CashPageState extends State<CashPage> {
           SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20, horizontal: 20),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 10, // กำหนดความกว้างของ Container
+                        height: 40, // กำหนดความสูงของ Container
+                        color: const Color(0xFF54B799), // กำหนดสีพื้นหลัง
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'รายการเลขที่ขึ้นรางวัลได้',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF444444),
+                              fontFamily: "Prompt",
+                              letterSpacing: 1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 200,
+                ),
+                Center(
+                  child: Image.asset(
+                    'assets/images/box-important.png',
+                    width: 100, // กำหนดความกว้างของรูปภาพ
+                    height: 100, // กำหนดความสูงของรูปภาพ
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Center(
+                    child: Text(
+                      'ไม่มีรายการที่สามารถขึ้นเงินได้',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF444444),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Align(
