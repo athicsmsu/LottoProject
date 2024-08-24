@@ -97,13 +97,13 @@ class _MainUserPageState extends State<MainUserPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
                           icon: const Icon(
                             Icons.chevron_left_outlined,
                             color: Colors.white,
-                            size: 60,
+                            size: 55,
                           ), // ปุ่มที่อยู่ขวามือ
                           onPressed: () {
                             // ฟังก์ชันเมื่อกดปุ่ม settings
@@ -134,7 +134,7 @@ class _MainUserPageState extends State<MainUserPage> {
                           icon: const Icon(
                             Icons.chevron_right_outlined,
                             color: Colors.white,
-                            size: 60,
+                            size: 55,
                           ), // ปุ่มที่อยู่ขวามือ
                           onPressed: () {
                             // ฟังก์ชันเมื่อกดปุ่ม settings

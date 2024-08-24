@@ -15,7 +15,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
@@ -73,27 +72,64 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
         body: Stack(children: [
-           SingleChildScrollView(
+          SingleChildScrollView(
             child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Container(
+                  child: GestureDetector(
+                    onTap: () {
+                      log("change image");
+                    },
+                    child: Container(
                       width: 180, // กำหนดความกว้าง
                       height: 180,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFD9D9D9), // สีของกรอบ
-                          width: 10, // ความหนาของกรอบ
-                        ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 180, // กำหนดความกว้าง
+                            height: 180,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: const Color(0xFFD9D9D9), // สีของกรอบ
+                                width: 10, // ความหนาของกรอบ
+                              ),
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                'assets/images/LottoLogo.jpg',
+                                width: 160, // กำหนดความกว้างของรูปภาพ
+                                height: 160, // กำหนดความสูงของรูปภาพ
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 40, // กำหนดความกว้างของวงกลมเล็ก
+                              height: 40, // กำหนดความสูงของวงกลมเล็ก
+                              decoration: BoxDecoration(
+                                color: Color(0xFF54B799), // สีพื้นหลังของวงกลมเล็ก
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white, // สีของกรอบวงกลมเล็ก
+                                  width: 2.5, // ความหนาของกรอบวงกลมเล็ก
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.edit, // ไอคอนที่จะแสดงในวงกลมเล็ก
+                                color: Colors.white, // สีของไอคอน
+                                size: 30, // ขนาดของไอคอน
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: ClipOval(
-                          child: Image.asset('assets/images/LottoLogo.jpg',
-                              width: 160, // กำหนดความกว้างของรูปภาพ
-                              height: 160, // กำหนดความสูงของรูปภาพ
-                              fit: BoxFit
-                                  .cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
+                    ),
+                  ),
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -202,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     )),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30,bottom: 10),
+                  padding: const EdgeInsets.only(top: 30, bottom: 10),
                   child: FilledButton(
                       onPressed: () => save(),
                       style: ButtonStyle(
@@ -210,8 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             const Size(160, 44)), // กำหนดขนาดของปุ่ม
                         backgroundColor: MaterialStateProperty.all(
                             const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(25.0), // ทำให้ขอบมน
                         )),
@@ -225,17 +260,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               letterSpacing: 1))),
                 ),
                 TextButton(
-                  onPressed: () {
-                    ChangePassword();
-                  },
-                  child: const Text('เปลี่ยนรหัสผ่าน',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFFFFFFF),
-                        fontFamily: "Prompt",
-                        letterSpacing: 1,
-                      ))),
+                    onPressed: () {
+                      ChangePassword();
+                    },
+                    child: const Text('เปลี่ยนรหัสผ่าน',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1,
+                        ))),
               ],
             ),
           ),
@@ -260,7 +295,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                         onTap: () {
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -407,12 +442,12 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  
+
   save() {
     log(nameCtl.text);
     log(emailCtl.text);
     log(phoneCtl.text);
   }
-  
+
   void ChangePassword() {}
 }
