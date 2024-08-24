@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.light(onPrimary: Color(0xFF024B3F)),
         useMaterial3: true,
       ),
-      home: LoginPage()
+      home: MainAdminPage()
     );
   }
 }
