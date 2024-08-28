@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/user/cash.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
@@ -52,8 +53,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
                         horizontal: 10, vertical: 30),
                     child: GestureDetector(
                       onTap: () {
-                        //Navigator.of(context).pop();
-                        purchaseList.add("145874");
+                        Navigator.of(context).pop();
                         setState(() {});
                       },
                       child: const Align(
@@ -208,188 +208,191 @@ class _MyLottoPageState extends State<MyLottoPage> {
                           ],
                         );
                       } else {
-                        return Column(
-                          children: purchaseList
-                              .map((purchase) => Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Container(
-                                      width:
-                                          400, // Adjust the width according to your needs
-                                      height:
-                                          155, // Adjust the height according to your needs
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        border: Border.all(
-                                          color: const Color(
-                                              0xFF000000), // Border color
-                                          width: 2, // Border width
-                                        ),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10, horizontal: 10),
-                                            child: Stack(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/elephant.png', // รูปช้างที่อยู่ด้านหลัง
-                                                  width:
-                                                      70, // กำหนดขนาดของรูปช้าง
-                                                  height: 80,
-                                                  fit: BoxFit
-                                                      .cover, // ครอบคลุมขนาดของกรอบ
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 40, top: 20),
-                                                  child: Container(
-                                                    width:
-                                                        70, // กำหนดขนาดของโลโก้
-                                                    height: 70,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape
-                                                          .circle, // กำหนดให้เป็นวงกลม
-                                                      border: Border.all(
-                                                        color: Colors
-                                                            .black, // สีของขอบ
-                                                        width:
-                                                            2, // ความหนาของขอบ
-                                                      ),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.5), // สีของเงา
-                                                          spreadRadius:
-                                                              2, // การกระจายของเงา
-                                                          blurRadius:
-                                                              5, // ความเบลอของเงา
-                                                          offset: const Offset(
-                                                              0,
-                                                              3), // การขยับของเงา (x, y)
-                                                        ),
-                                                      ],
-                                                      image:
-                                                          const DecorationImage(
-                                                        image: AssetImage(
-                                                            'assets/images/LottoLogo.jpg'), // รูปลอตเตอรี่
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 90, left: 20),
-                                                  child: Text(
-                                                    '80',
-                                                    style: TextStyle(
-                                                        fontSize: 24,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xFF1E1E1E),
-                                                        fontFamily: "Prompt",
-                                                        letterSpacing: 1),
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 110, left: 20),
-                                                  child: Text(
-                                                    'บาท',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xFF444444),
-                                                        fontFamily: "Prompt",
-                                                        letterSpacing: 1),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 100),
+                          child: Column(
+                            children: purchaseList
+                                .map((purchase) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Container(
+                                        width:
+                                            400, // Adjust the width according to your needs
+                                        height:
+                                            155, // Adjust the height according to your needs
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          border: Border.all(
+                                            color: const Color(
+                                                0xFF000000), // Border color
+                                            width: 2, // Border width
                                           ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 10),
                                               child: Stack(
                                                 children: [
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5,
-                                                        vertical: 2.5),
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFFDAE924), // สีพื้นหลังของช่องหมายเลข
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              3.0),
-                                                    ),
-                                                    child: Text(
-                                                      purchase, // Display the lottery number
-                                                      style: const TextStyle(
-                                                        fontSize: 30,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black,
-                                                        letterSpacing: 10.0,
+                                                  Image.asset(
+                                                    'assets/images/elephant.png', // รูปช้างที่อยู่ด้านหลัง
+                                                    width:
+                                                        70, // กำหนดขนาดของรูปช้าง
+                                                    height: 80,
+                                                    fit: BoxFit
+                                                        .cover, // ครอบคลุมขนาดของกรอบ
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 40, top: 20),
+                                                    child: Container(
+                                                      width:
+                                                          70, // กำหนดขนาดของโลโก้
+                                                      height: 70,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape
+                                                            .circle, // กำหนดให้เป็นวงกลม
+                                                        border: Border.all(
+                                                          color: Colors
+                                                              .black, // สีของขอบ
+                                                          width:
+                                                              2, // ความหนาของขอบ
+                                                        ),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.5), // สีของเงา
+                                                            spreadRadius:
+                                                                2, // การกระจายของเงา
+                                                            blurRadius:
+                                                                5, // ความเบลอของเงา
+                                                            offset: const Offset(
+                                                                0,
+                                                                3), // การขยับของเงา (x, y)
+                                                          ),
+                                                        ],
+                                                        image:
+                                                            const DecorationImage(
+                                                          image: AssetImage(
+                                                              'assets/images/LottoLogo.jpg'), // รูปลอตเตอรี่
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 60),
-                                                    child: Image.asset(
-                                                      'assets/images/qrcode.png',
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 90, left: 20),
+                                                    child: Text(
+                                                      '80',
+                                                      style: TextStyle(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Color(0xFF1E1E1E),
+                                                          fontFamily: "Prompt",
+                                                          letterSpacing: 1),
                                                     ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 70),
-                                                    child: Image.asset(
-                                                      'assets/images/animal.png',
-                                                      width:
-                                                          150, // Adjust the size according to your needs
-                                                      height:
-                                                          150, // Adjust the size according to your needs
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 110, left: 20),
+                                                    child: Text(
+                                                      'บาท',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Color(0xFF444444),
+                                                          fontFamily: "Prompt",
+                                                          letterSpacing: 1),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            width:
-                                                40, // Adjust according to your needs
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFF54B799),
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(6.0),
-                                                bottomRight:
-                                                    Radius.circular(6.0),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5,
+                                                          vertical: 2.5),
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                            0xFFDAE924), // สีพื้นหลังของช่องหมายเลข
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                3.0),
+                                                      ),
+                                                      child: Text(
+                                                        purchase, // Display the lottery number
+                                                        style: const TextStyle(
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.black,
+                                                          letterSpacing: 10.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 60),
+                                                      child: Image.asset(
+                                                        'assets/images/qrcode.png',
+                                                        width: 60,
+                                                        height: 60,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 70),
+                                                      child: Image.asset(
+                                                        'assets/images/animal.png',
+                                                        width:
+                                                            150, // Adjust the size according to your needs
+                                                        height:
+                                                            150, // Adjust the size according to your needs
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            Container(
+                                              width:
+                                                  40, // Adjust according to your needs
+                                              decoration: const BoxDecoration(
+                                                color: Color(0xFF005A24),
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(6.0),
+                                                  bottomRight:
+                                                      Radius.circular(6.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ))
-                              .toList(),
+                                    ))
+                                .toList(),
+                          ),
                         );
                       }
                     },
