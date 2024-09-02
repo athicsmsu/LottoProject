@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/cash.dart';
+import 'package:lotto_application/pages/user/drawer.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
 import 'package:lotto_application/pages/user/mylotto.dart';
@@ -449,7 +449,7 @@ class _MainUserPageState extends State<MainUserPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const CashPage(),
+                              builder: (context) => const DrawerPage(),
                             ),
                           );
                         },

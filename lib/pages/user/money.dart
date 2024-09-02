@@ -2,11 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // เพิ่ม import นี้สำหรับ TextInputFormatter
-import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/cash.dart';
-import 'package:lotto_application/pages/user/lotto.dart';
-import 'package:lotto_application/pages/user/main.dart';
-import 'package:lotto_application/pages/user/reward.dart';
 
 class MoneyPage extends StatefulWidget {
   const MoneyPage({super.key});

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/admin/adward.dart';
-import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/login.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/cash.dart';
+import 'package:lotto_application/pages/user/drawer.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
@@ -568,7 +568,7 @@ class _RewardPageState extends State<RewardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const CashPage(),
+                              builder: (context) => const DrawerPage(),
                             ),
                           );
                         },

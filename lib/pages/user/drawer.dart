@@ -7,15 +7,15 @@ import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
 
-class CashPage extends StatefulWidget {
-  const CashPage({super.key});
+class DrawerPage extends StatefulWidget {
+  const DrawerPage({super.key});
 
   @override
-  State<CashPage> createState() => _CashPageState();
+  State<DrawerPage> createState() => _DrawerPageState();
 }
 
-class _CashPageState extends State<CashPage> {
-  List<String> WonLottoList = []; // ลิสต์สำหรับเก็บรายการที่ถูกรางวัล
+class _DrawerPageState extends State<DrawerPage> {
+  List<String> wonLottoList = []; // ลิสต์สำหรับเก็บรายการที่ถูกรางวัล
   late Future<void> loadData;
 
   @override
@@ -49,9 +49,7 @@ class _CashPageState extends State<CashPage> {
             child: GestureDetector(
               onTap: () {
                 // ฟังก์ชันเมื่อกดปุ่ม back
-                // Navigator.of(context).pop();
-                 WonLottoList.add("145874");
-                 setState(() {});
+                Navigator.of(context).pop();
               },
               child: const Icon(
                 Icons.arrow_back,
@@ -87,7 +85,7 @@ class _CashPageState extends State<CashPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 20),
+                        vertical: 20),
                     child: Row(
                       children: [
                         Container(
@@ -134,7 +132,7 @@ class _CashPageState extends State<CashPage> {
                                 letterSpacing: 1),
                           ),
                         );
-                      } else if (WonLottoList.isEmpty) {
+                      } else if (wonLottoList.isEmpty) {
                         return Column(
                           children: [
                             const SizedBox(height: 150),
@@ -166,7 +164,8 @@ class _CashPageState extends State<CashPage> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 100),
                           child: Column(
-                            children: WonLottoList.map((wonlotto) => Column(
+                            children: wonLottoList
+                                .map((wonlotto) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Padding(
@@ -599,12 +598,12 @@ class _CashPageState extends State<CashPage> {
     // //call api /trips
     // var data = await http.get(Uri.parse('$url/users/${widget.idx}'));
     // trip = tripGetByIdResponseFromJson(data.body);
-    WonLottoList.add("145874");
+    wonLottoList.add("145874");
     // purchaseList.add("145874");
     // purchaseList.add("145874");
   }
 
   claimlotto() {
-    log('gggg');
+    log('claim');
   }
 }

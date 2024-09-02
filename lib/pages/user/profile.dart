@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lotto_application/pages/changepassword.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/cash.dart';
+import 'package:lotto_application/pages/user/drawer.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/reward.dart';
@@ -261,7 +262,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      ChangePassword();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChangePasswordPage(),
+                        ),
+                      );
                     },
                     child: const Text('เปลี่ยนรหัสผ่าน',
                         style: TextStyle(
@@ -358,7 +364,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const CashPage(),
+                              builder: (context) => const DrawerPage(),
                             ),
                           );
                         },
