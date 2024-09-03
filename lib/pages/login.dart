@@ -130,47 +130,44 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            register();
-                          },
-                          child: const Text('สมัครสมาชิก',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF54B799),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1))),
-                      FilledButton(
-                          onPressed: () => login(),
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(160, 44)), // กำหนดขนาดของปุ่ม
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(25.0), // ทำให้ขอบมน
-                            )),
-                          ),
-                          child: const Text('เข้าสู่ระบบ',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFFFFFFF),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1))),
-                    ],
-                  ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          register();
+                        },
+                        child: const Text('สมัครสมาชิก',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF54B799),
+                                fontFamily: "Prompt",
+                                letterSpacing: 1))),
+                    FilledButton(
+                        onPressed: () => login(),
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all(
+                              const Size(160, 44)), // กำหนดขนาดของปุ่ม
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
+                          shape:
+                              MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(25.0), // ทำให้ขอบมน
+                          )),
+                        ),
+                        child: const Text('เข้าสู่ระบบ',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFFFFFFF),
+                                fontFamily: "Prompt",
+                                letterSpacing: 1))),
+                  ],
                 ),
               ),
               TextButton(
@@ -201,12 +198,104 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   login() {
-    log("login");
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainUserPage(),
-        ));
+    if (phoneCtl.text.isEmpty || passwordCtl.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'โปรดใส่อีเมลหรือรหัสผ่าน',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else {
+      log("login");
+      List<String> phones = [];
+      phones.add('sss');
+      for (var phone in phones) {
+        if (phoneCtl.text == phone) {
+         Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainUserPage(),
+          ));
+          return; 
+        }
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   forgotPassword() {

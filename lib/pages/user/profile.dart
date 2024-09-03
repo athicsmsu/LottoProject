@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/changepassword.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/drawer.dart';
+import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/reward.dart';
@@ -364,7 +364,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DrawerPage(),
+                              builder: (context) => const LottoWinPage(),
                             ),
                           );
                         },
@@ -448,12 +448,52 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  save() {
+  void save() {
+    
     log(nameCtl.text);
     log(emailCtl.text);
     log(phoneCtl.text);
-  }
 
-  void ChangePassword() {}
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'สำเร็จ',
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF139D51),
+              fontFamily: "Prompt",
+              letterSpacing: 1),
+        ),
+        content: const Text(
+          'บันทึกข้อมูลเสร็จสิ้น',
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1E1E1E),
+              fontFamily: "Prompt",
+              letterSpacing: 1),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+            ),
+            child: const Text('ปิด',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1)),
+          ),
+        ],
+      ),
+    );
+  }
 }

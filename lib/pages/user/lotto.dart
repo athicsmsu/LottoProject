@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/drawer.dart';
+import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
@@ -583,7 +583,7 @@ class _LottoPageState extends State<LottoPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DrawerPage(),
+                              builder: (context) => const LottoWinPage(),
                             ),
                           );
                         },

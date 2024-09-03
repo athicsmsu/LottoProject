@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,16 +11,16 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
   TextEditingController confirmpasswordCtl = TextEditingController();
+  TextEditingController moneyCtl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       theme: ThemeData(
         // colorScheme: const ColorScheme.light(
         //   primary: Color(0xFF024B3F), // สีหลักของธีม
@@ -254,8 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 42,right: 42,top: 32),
+                padding: const EdgeInsets.only(left: 42, right: 42, top: 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -271,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 fontFamily: "Prompt",
                                 letterSpacing: 1))),
                     FilledButton(
-                        onPressed: () => register(),
+                        onPressed: () => dialog(),
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(
                               const Size(160, 44)), // กำหนดขนาดของปุ่ม
@@ -299,8 +299,359 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-  
+
   register() {
-    log("สมัคร");
+    log(moneyCtl.text);
+    Navigator.of(context).pop();
+  }
+
+  dialog() {
+    if (nameCtl.text.isEmpty ||
+        emailCtl.text.isEmpty ||
+        phoneCtl.text.isEmpty ||
+        passwordCtl.text.isEmpty ||
+        confirmpasswordCtl.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'คุณกรอกข้อมูลไม่ครบ',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (confirmpasswordCtl.text != passwordCtl.text) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'รหัสผ่านไม่ตรงกัน',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else {
+      List<String> emails = [];
+      emails.add('sss');
+      for (var email in emails) {
+        if (emailCtl.text == email) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text(
+                'ผิดพลาด',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFE84C1B),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1),
+              ),
+              content: const Text(
+                'อีเมลเคยใช้สมัครแล้ว',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF000000),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1),
+              ),
+              actions: [
+                FilledButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+                  ),
+                  child: const Text('ปิด',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1)),
+                ),
+              ],
+            ),
+          );
+          return;
+        } 
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0), // ทำให้มุมโค้งมน
+          ),
+          title: const Text('เงินจําลอง',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF000000),
+                  fontFamily: "Prompt",
+                  letterSpacing: 1)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFC6C6C6), // สีพื้นหลังของตัวเลข
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextField(
+                          controller: moneyCtl,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '0',
+                            hintStyle: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          textAlign: TextAlign.right, // จัดให้ตัวเลขอยู่ด้านขวา
+                          keyboardType:
+                              TextInputType.number, // แสดงคีย์บอร์ดเป็นตัวเลข
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter
+                                .digitsOnly, // จำกัดตัวเลขที่ป้อนได้สูงสุด 6 ตัว
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      '฿',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF000000),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xFFE84C1B),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'ยกเลิก',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xFF33CA7A),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'ตกลง',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (moneyCtl.text.isEmpty || moneyCtl.text == '0') {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text(
+                              'ผิดพลาด',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFE84C1B),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                            content: const Text(
+                              'คุณไม่ได้กรอกเงินเริ่มต้น',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF000000),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                            actions: [
+                              FilledButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  dialog();
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(
+                                          0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+                                ),
+                                child: const Text('ปิด',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFFFFFFF),
+                                        fontFamily: "Prompt",
+                                        letterSpacing: 1)),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text(
+                              'สำเร็จ',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF139D51),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                            content: const Text(
+                              'ลงทะเบียนเสร็จสิ้น',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1E1E1E),
+                                  fontFamily: "Prompt",
+                                  letterSpacing: 1),
+                            ),
+                            actions: [
+                              FilledButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  register();
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color(
+                                          0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+                                ),
+                                child: const Text('ปิด',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFFFFFFF),
+                                        fontFamily: "Prompt",
+                                        letterSpacing: 1)),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

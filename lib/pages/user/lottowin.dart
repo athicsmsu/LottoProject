@@ -7,14 +7,14 @@ import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
 
-class DrawerPage extends StatefulWidget {
-  const DrawerPage({super.key});
+class LottoWinPage extends StatefulWidget {
+  const LottoWinPage({super.key});
 
   @override
-  State<DrawerPage> createState() => _DrawerPageState();
+  State<LottoWinPage> createState() => _LottoWinPageState();
 }
 
-class _DrawerPageState extends State<DrawerPage> {
+class _LottoWinPageState extends State<LottoWinPage> {
   List<String> wonLottoList = []; // ลิสต์สำหรับเก็บรายการที่ถูกรางวัล
   late Future<void> loadData;
 

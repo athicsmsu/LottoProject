@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/drawer.dart';
+import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
 import 'package:lotto_application/pages/user/mylotto.dart';
@@ -11,7 +11,7 @@ import 'package:lotto_application/pages/user/reward.dart';
 
 class MainUserPage extends StatefulWidget {
   const MainUserPage({super.key});
-
+  
   @override
   State<MainUserPage> createState() => _MainUserPageState();
 }
@@ -20,9 +20,10 @@ class _MainUserPageState extends State<MainUserPage> {
   int numnews = 1;
   String nummoney = '21.00';
   String hideMoneytxt = 'ซ่อนยอดเงิน';
-  
+
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       theme: ThemeData(
         // colorScheme: const ColorScheme.light(
@@ -77,7 +78,6 @@ class _MainUserPageState extends State<MainUserPage> {
                 size: 40,
               ), // ปุ่มที่อยู่ขวามือ
               onPressed: () {
-                // ฟังก์ชันเมื่อกดปุ่ม settings
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -449,7 +449,7 @@ class _MainUserPageState extends State<MainUserPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DrawerPage(),
+                              builder: (context) => const LottoWinPage(),
                             ),
                           );
                         },
