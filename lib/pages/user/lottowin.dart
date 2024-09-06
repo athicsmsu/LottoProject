@@ -6,6 +6,8 @@ import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class LottoWinPage extends StatefulWidget {
   const LottoWinPage({super.key});
@@ -17,11 +19,14 @@ class LottoWinPage extends StatefulWidget {
 class _LottoWinPageState extends State<LottoWinPage> {
   List<String> wonLottoList = []; // ลิสต์สำหรับเก็บรายการที่ถูกรางวัล
   late Future<void> loadData;
-
+  late MemberProfile user;
+  
   @override
   void initState() {
     super.initState();
     loadData = loadDataAsync();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
   }
 
   @override
@@ -447,7 +452,7 @@ class _LottoWinPageState extends State<LottoWinPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const MainUserPage(),
+                              builder: (context) => MainUserPage(),
                             ),
                           );
                         },

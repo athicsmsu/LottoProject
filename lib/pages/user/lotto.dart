@@ -7,6 +7,8 @@ import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class LottoPage extends StatefulWidget {
   const LottoPage({super.key});
@@ -20,12 +22,15 @@ class _LottoPageState extends State<LottoPage> {
   TextEditingController numLottoCtl = TextEditingController();
   List<String> lottoList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
   late Future<void> loadData;
+  late MemberProfile user;
+  String uname = '';
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
+    //super.initState();
     loadData = loadDataAsync();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
   }
   @override
   Widget build(BuildContext context) {

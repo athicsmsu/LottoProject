@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class RewardPage extends StatefulWidget {
   const RewardPage({super.key});
@@ -13,6 +17,15 @@ class RewardPage extends StatefulWidget {
 }
 
 class _RewardPageState extends State<RewardPage> {
+  late Future<void> loadData;
+    late MemberProfile user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/login.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => Appdata(),
+      )
+    ],
+    child: const MyApp(),
+  ));
+
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

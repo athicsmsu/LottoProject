@@ -7,6 +7,8 @@ import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,7 +21,15 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
+  late Future<void> loadData;
+  late MemberProfile user;
 
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

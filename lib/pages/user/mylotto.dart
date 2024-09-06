@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/user/lottowin.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class MyLottoPage extends StatefulWidget {
   const MyLottoPage({super.key});
@@ -16,10 +20,14 @@ class _MyLottoPageState extends State<MyLottoPage> {
   List<String> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
   late Future<void> loadData;
 
+ late MemberProfile user;
+
   @override
   void initState() {
     super.initState();
     loadData = loadDataAsync();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
   }
 
   @override
