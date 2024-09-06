@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Req/MemberRegisterPortReq.dart';
+import 'package:http/http.dart' as http;
+import 'package:lotto_application/models/Res/MemberRegisterPostRes.dart';
+import 'package:lotto_application/pages/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,12 +17,29 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
   TextEditingController confirmpasswordCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
+
+   String url = '';
+
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ConfigUration.getConfig().then(
+      (value){
+        url = value['apiEndpoint'];
+        log(value['apiEndpoint']);
+      }
+    ).catchError((err){
+      log(err.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -300,8 +323,37 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  register() {
-    log(moneyCtl.text);
+  register() async {
+    
+
+
+        var data = MemberRegisterPortReq(
+        name: nameCtl.text, 
+        phone: phoneCtl.text, 
+        email: emailCtl.text, 
+        image: "", 
+        password: passwordCtl.text,
+        walletBalance: int.parse(moneyCtl.text),
+        type: "member"
+        );
+        
+        try {
+
+        
+          var value = await http.post(Uri.parse('$url/member'),
+          headers: {"Content-Type":"application/json; charset=utf-8"},
+          body: jsonEncode(data));
+
+                log(value.body);
+                var member = memberRegisterPostResFromJson(value.body);
+                log(member.affectedRow.toString());
+                log(member.lastIdx.toString());
+                
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
+        }
+        catch (eee) {
+          log("Insert Error" + eee.toString());
+        }
     Navigator.of(context).pop();
   }
 
