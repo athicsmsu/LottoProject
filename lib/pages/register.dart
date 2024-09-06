@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/MemberRegisterPortReq.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_application/models/Res/MemberChackGetRes.dart';
 import 'package:lotto_application/models/Res/MemberRegisterPostRes.dart';
 import 'package:lotto_application/pages/login.dart';
 
@@ -24,7 +25,10 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController confirmpasswordCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
 
+  List<MemberChackGetRes> users = [];
   String url = '';
+
+  late Future<void> loadData;
 
   @override
   void initState() {
@@ -40,6 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
         log(error);
       },
     );
+    loadData = loadDataAsync();
   }
 
   @override
@@ -324,6 +329,13 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Future<void> loadDataAsync() async {
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var result = await http.get(Uri.parse('$url/member/all'));
+    users = memberChackGetResFromJson(result.body);
+  }
+
   register() async {
     var data = MemberRegisterPortReq(
         name: nameCtl.text,
@@ -438,10 +450,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
     } else {
-      List<String> emails = [];
-      emails.add('sss');
-      for (var email in emails) {
-        if (emailCtl.text == email) {
+      for (var user in users) {
+        if (emailCtl.text == user.email) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -486,6 +496,53 @@ class _RegisterPageState extends State<RegisterPage> {
           return;
         }
       }
+      for (var user in users) {
+        if (phoneCtl.text == user.phone) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text(
+                'ผิดพลาด',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFE84C1B),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1),
+              ),
+              content: const Text(
+                'เบอร์เคยใช้สมัครแล้ว',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF000000),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1),
+              ),
+              actions: [
+                FilledButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+                  ),
+                  child: const Text('ปิด',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                          fontFamily: "Prompt",
+                          letterSpacing: 1)),
+                ),
+              ],
+            ),
+          );
+          return;
+        }
+      }
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
