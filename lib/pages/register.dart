@@ -17,7 +17,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
@@ -25,20 +24,22 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController confirmpasswordCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
 
-   String url = '';
+  String url = '';
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    ConfigUration.getConfig().then(
-      (value){
+    Configuration.getConfig().then(
+      (value) {
         url = value['apiEndpoint'];
-        log(value['apiEndpoint']);
-      }
-    ).catchError((err){
-      log(err.toString());
-    });
+        log(url);
+      },
+    ).catchError(
+      (error) {
+        log(error);
+      },
+    );
   }
 
   @override
@@ -324,37 +325,27 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   register() async {
-    
-
-
-        var data = MemberRegisterPortReq(
-        name: nameCtl.text, 
-        phone: phoneCtl.text, 
-        email: emailCtl.text, 
-        image: "", 
+    var data = MemberRegisterPortReq(
+        name: nameCtl.text,
+        phone: phoneCtl.text,
+        email: emailCtl.text,
+        image: "",
         password: passwordCtl.text,
         walletBalance: int.parse(moneyCtl.text),
-        type: "member"
-        );
-        
-        try {
+        Type: "member");
 
-        
-          var value = await http.post(Uri.parse('$url/member'),
-          headers: {"Content-Type":"application/json; charset=utf-8"},
+    try {
+      var value = await http.post(Uri.parse('$url/member'),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
           body: jsonEncode(data));
-
-                log(value.body);
-                var member = memberRegisterPostResFromJson(value.body);
-                log(member.affectedRow.toString());
-                log(member.lastIdx.toString());
-                
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage(),));
-        }
-        catch (eee) {
-          log("Insert Error" + eee.toString());
-        }
-    Navigator.of(context).pop();
+      log(value.body);
+      var member = memberRegisterPostResFromJson(value.body);
+      log(member.affectedRow.toString());
+      log(member.lastIdx.toString());
+    } catch (eee) {
+      log("Insert Error " + eee.toString());
+    }
+    // Navigator.of(context).pop();
   }
 
   dialog() {
@@ -493,7 +484,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           );
           return;
-        } 
+        }
       }
       showDialog(
         context: context,

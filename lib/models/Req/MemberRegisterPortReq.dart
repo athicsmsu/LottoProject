@@ -15,7 +15,7 @@ class MemberRegisterPortReq {
     String image;
     String email;
     int walletBalance;
-    String type;
+    String Type;
 
     MemberRegisterPortReq({
         required this.name,
@@ -24,7 +24,7 @@ class MemberRegisterPortReq {
         required this.image,
         required this.email,
         required this.walletBalance,
-        required this.type,
+        required this.Type,
     });
 
     factory MemberRegisterPortReq.fromJson(Map<String, dynamic> json) => MemberRegisterPortReq(
@@ -34,7 +34,7 @@ class MemberRegisterPortReq {
         image: json["Image"],
         email: json["Email"],
         walletBalance: json["wallet_balance"],
-        type: json["type"],
+        Type: json["type"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -44,6 +44,6 @@ class MemberRegisterPortReq {
         "Image": image,
         "Email": email,
         "wallet_balance": walletBalance,
-        "type": type,
+        "Type": Type,
     };
 }
