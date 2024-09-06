@@ -357,7 +357,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (eee) {
       log("Insert Error " + eee.toString());
     }
-    //Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   dialog() {
