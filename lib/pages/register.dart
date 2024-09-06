@@ -339,13 +339,13 @@ class _RegisterPageState extends State<RegisterPage> {
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: jsonEncode(data));
       log(value.body);
-      var member = memberRegisterPostResFromJson(value.body);
-      log(member.affectedRow.toString());
-      log(member.lastIdx.toString());
+      // var member = memberRegisterPostResFromJson(value.body);
+      // log(member.affectedRow.toString());
+      // log(member.lastIdx.toString());
     } catch (eee) {
       log("Insert Error " + eee.toString());
     }
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   dialog() {

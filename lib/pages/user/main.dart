@@ -8,6 +8,7 @@ import 'package:lotto_application/pages/user/money.dart';
 import 'package:lotto_application/pages/user/mylotto.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
+import 'package:http/http.dart' as http;
 
 class MainUserPage extends StatefulWidget {
   const MainUserPage({super.key});

@@ -1,10 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Req/MemberLoginPostReq.dart';
+import 'package:lotto_application/models/Res/MemberLoginPostRes.dart';
+import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/forgotpassword.dart';
 import 'package:lotto_application/pages/register.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,6 +23,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
+  String url = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Configuration.getConfig().then(
+      (value) {
+        url = value['apiEndpoint'];
+        log(url);
+      },
+    ).catchError(
+      (error) {
+        log(error);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +84,8 @@ class _LoginPageState extends State<LoginPage> {
                           child: Image.asset('assets/images/LottoLogo.jpg',
                               width: 160, // กำหนดความกว้างของรูปภาพ
                               height: 160, // กำหนดความสูงของรูปภาพ
-                              fit:
-                                  BoxFit.cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
+                              fit: BoxFit
+                                  .cover))), // ปรับขนาดรูปภาพให้เต็มพื้นที่
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -159,8 +182,8 @@ class _LoginPageState extends State<LoginPage> {
                                 const Size(160, 44)), // กำหนดขนาดของปุ่ม
                             backgroundColor: MaterialStateProperty.all(
                                 const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                            shape:
-                                MaterialStateProperty.all(RoundedRectangleBorder(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(25.0), // ทำให้ขอบมน
                             )),
@@ -203,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  login() {
+  login() async {
     if (phoneCtl.text.isEmpty || passwordCtl.text.isEmpty) {
       showDialog(
         context: context,
@@ -247,60 +270,76 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     } else {
-      log("login");
-      List<String> phones = [];
-      phones.add('sss');
-      for (var phone in phones) {
-        if (phoneCtl.text == phone) {
-         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainUserPage(),
-          ));
-          return; 
+      var phone = phoneCtl.text;
+      var password = passwordCtl.text;
+      var data = MemberLoginPostReq(phone: phone, password: password);
+      try {
+        var value = await http.post(Uri.parse('$url/member/login'),
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+            body: jsonEncode(data));
+        var member = memberLoginPostResponseFromJson(value.body);
+        log(member.message);
+        if (member.type == 'member') {
+          MemberProfile user = MemberProfile();
+          user.id = member.id;
+          context.read<Appdata>().user = user; //อันตรายห้ามลืม
+          log(user.id.toString());
+           Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainUserPage(),
+                ));
+        } else if (member.type == 'admin') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainAdminPage(),
+              ));
         }
-      }
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(
-            'ผิดพลาด',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFE84C1B),
-                fontFamily: "Prompt",
-                letterSpacing: 1),
-          ),
-          content: const Text(
-            'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF000000),
-                fontFamily: "Prompt",
-                letterSpacing: 1),
-          ),
-          actions: [
-            FilledButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
-              ),
-              child: const Text('ปิด',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFFFFFF),
-                      fontFamily: "Prompt",
-                      letterSpacing: 1)),
+      } catch (eee) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text(
+              'ผิดพลาด',
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFE84C1B),
+                  fontFamily: "Prompt",
+                  letterSpacing: 1),
             ),
-          ],
-        ),
-      );
+            content: const Text(
+              'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF000000),
+                  fontFamily: "Prompt",
+                  letterSpacing: 1),
+            ),
+            actions: [
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+                ),
+                child: const Text('ปิด',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFFFFF),
+                        fontFamily: "Prompt",
+                        letterSpacing: 1)),
+              ),
+            ],
+          ),
+        );
+        log(eee.toString());
+      }
     }
   }
 
