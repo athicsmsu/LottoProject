@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/MemberLoginPostReq.dart';
 import 'package:lotto_application/models/Res/MemberLoginPostRes.dart';
@@ -21,9 +25,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  GetStorage storage = GetStorage();
+  MemberProfile user = MemberProfile();
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
   String url = '';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +45,32 @@ class _LoginPageState extends State<LoginPage> {
         log(error);
       },
     );
+    try {
+      String userStatus = storage.read('userStatus');
+      user.id = storage.read('id');
+      user.fullname = storage.read('name');
+      user.phone = storage.read('phone');
+      user.image = storage.read('image');
+      user.email = storage.read('email');
+      user.wallet_balance = storage.read('walletBalance');
+      context.read<Appdata>().user = user;
+      context.read<Appdata>().page = 'mainUser';
+      if (userStatus == 'member') {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainUserPage(),
+              ));
+        });
+      } else if (userStatus == 'admin') {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Get.to(() => const MainAdminPage());
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override
@@ -119,6 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                               fillColor: const Color(0xFFD9D9D9),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0))),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(
+                                10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
+                          ],
                         ),
                       ],
                     )),
@@ -277,19 +314,39 @@ class _LoginPageState extends State<LoginPage> {
         var value = await http.post(Uri.parse('$url/member/login'),
             headers: {"Content-Type": "application/json; charset=utf-8"},
             body: jsonEncode(data));
-        var member = memberLoginPostResponseFromJson(value.body);
+        var member = memberLoginPostResFromJson(value.body);
         log(member.message);
         if (member.type == 'member') {
-          MemberProfile user = MemberProfile();
+          context.read<Appdata>().page = 'mainUser';
           user.id = member.id;
+          user.fullname = member.name;
+          user.phone = member.phone;
+          user.image = member.image;
+          user.email = member.email;
+
+          if (member.walletBalance is int) {
+            // ถ้า member.money เป็น int แปลงเป็น double
+            user.wallet_balance = (member.walletBalance as int).toDouble();
+          } else if (member.walletBalance is double) {
+            // ถ้า member.money เป็น double กำหนดค่าโดยตรง
+            user.wallet_balance = member.walletBalance;
+          }
+
+          storage.write('userStatus', member.type);
+          storage.write('id', member.id);
+          storage.write('name', member.name);
+          storage.write('phone', member.phone);
+          storage.write('image', member.image);
+          storage.write('email', member.email);
           context.read<Appdata>().user = user; //อันตรายห้ามลืม
-          log(user.id.toString());
-           Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainUserPage(),
-                ));
+          storage.write('walletBalance', user.wallet_balance);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainUserPage(),
+              ));
         } else if (member.type == 'admin') {
+          storage.write('userStatus', member.type);
           Navigator.push(
               context,
               MaterialPageRoute(

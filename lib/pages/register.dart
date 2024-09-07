@@ -3,12 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/utils.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/MemberRegisterPortReq.dart';
 import 'package:http/http.dart' as http;
-import 'package:lotto_application/models/Res/MemberChackGetRes.dart';
-import 'package:lotto_application/models/Res/MemberRegisterPostRes.dart';
-import 'package:lotto_application/pages/login.dart';
+import 'package:lotto_application/models/Res/MemberCheckGetRes.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -25,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController confirmpasswordCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
 
-  List<MemberChackGetRes> users = [];
+  List<MemberCheckGetRes> users = [];
   String url = '';
 
   late Future<void> loadData;
@@ -200,6 +199,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             fillColor: const Color(0xFFD9D9D9),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0))),
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(
+                              10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
+                        ],
                       ),
                     ),
                   ],
@@ -333,7 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
     var result = await http.get(Uri.parse('$url/member/all'));
-    users = memberChackGetResFromJson(result.body);
+    users = memberCheckGetResFromJson(result.body);
   }
 
   register() async {
@@ -449,6 +452,91 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       );
+    } else if (phoneCtl.text.length < 10 ||
+        !RegExp(r'^[0-9]+$').hasMatch(phoneCtl.text)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'หมายเลขโทรศัพท์ไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (!GetUtils.isEmail(emailCtl.text)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'อีเมลไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
     } else {
       for (var user in users) {
         if (emailCtl.text == user.email) {
@@ -511,7 +599,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     letterSpacing: 1),
               ),
               content: const Text(
-                'เบอร์เคยใช้สมัครแล้ว',
+                'หมายเลขนี้เคยใช้สมัครแล้ว',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -542,7 +630,6 @@ class _RegisterPageState extends State<RegisterPage> {
           return;
         }
       }
-
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -702,6 +789,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       } else {
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (context) => AlertDialog(
                             title: const Text(
                               'สำเร็จ',

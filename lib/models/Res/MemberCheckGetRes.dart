@@ -4,21 +4,21 @@
 
 import 'dart:convert';
 
-List<MemberChackGetRes> memberChackGetResFromJson(String str) => List<MemberChackGetRes>.from(json.decode(str).map((x) => MemberChackGetRes.fromJson(x)));
+List<MemberCheckGetRes> memberCheckGetResFromJson(String str) => List<MemberCheckGetRes>.from(json.decode(str).map((x) => MemberCheckGetRes.fromJson(x)));
 
-String memberChackGetResToJson(List<MemberChackGetRes> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String memberCheckGetResToJson(List<MemberCheckGetRes> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class MemberChackGetRes {
+class MemberCheckGetRes {
     int memberId;
     String name;
     String phone;
     String password;
     String image;
     String email;
-    int walletBalance;
+    var walletBalance;
     String type;
 
-    MemberChackGetRes({
+    MemberCheckGetRes({
         required this.memberId,
         required this.name,
         required this.phone,
@@ -29,7 +29,7 @@ class MemberChackGetRes {
         required this.type,
     });
 
-    factory MemberChackGetRes.fromJson(Map<String, dynamic> json) => MemberChackGetRes(
+    factory MemberCheckGetRes.fromJson(Map<String, dynamic> json) => MemberCheckGetRes(
         memberId: json["member_id"],
         name: json["name"],
         phone: json["Phone"],

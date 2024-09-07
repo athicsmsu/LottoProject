@@ -1,7 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // เพิ่ม import นี้สำหรับ TextInputFormatter
+import 'package:flutter/services.dart';
+import 'package:lotto_application/pages/user/main.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart'; // เพิ่ม import นี้สำหรับ TextInputFormatter
 
 class MoneyPage extends StatefulWidget {
   const MoneyPage({super.key});
@@ -11,10 +12,30 @@ class MoneyPage extends StatefulWidget {
 }
 
 class _MoneyPageState extends State<MoneyPage> {
+  late MemberProfile user;
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
-  bool isApplePaySelected = false;
+
+  bool isApplePaySelected = true;
   bool isPayPalSelected = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = context.read<Appdata>().user;
+
+    var txtPhone = user.phone;
+    if (txtPhone.length > 10) {
+      txtPhone = txtPhone.substring(0, 10);
+    }
+    if (txtPhone.length > 3 && txtPhone.length <= 6) {
+      txtPhone = '${txtPhone.substring(0, 3)}-${txtPhone.substring(3)}';
+    } else if (txtPhone.length > 6) {
+      txtPhone = '${txtPhone.substring(0, 3)}-${txtPhone.substring(3, 6)}-${txtPhone.substring(6, txtPhone.length)}';
+    }
+    phoneCtl.text = txtPhone;
+  }
 
   void _onApplePayTapped() {
     setState(() {
@@ -90,8 +111,8 @@ class _MoneyPageState extends State<MoneyPage> {
                             ),
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                              'assets/images/LottoLogo.jpg',
+                            child: Image.network(
+                              user.image,
                               width: 80, // กำหนดความกว้างของรูปภาพ
                               height: 80, // กำหนดความสูงของรูปภาพ
                               fit: BoxFit.cover,
@@ -99,12 +120,12 @@ class _MoneyPageState extends State<MoneyPage> {
                           ),
                         ),
                         const SizedBox(width: 30),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'คุณ ยงยอด แสนดี',
-                              style: TextStyle(
+                              'คุณ ${user.fullname}',
+                              style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF54B799),
@@ -112,8 +133,8 @@ class _MoneyPageState extends State<MoneyPage> {
                                   letterSpacing: 1),
                             ),
                             Text(
-                              '21.00 บาท',
-                              style: TextStyle(
+                              '${user.wallet_balance} บาท',
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFD9D9D9),
@@ -276,8 +297,9 @@ class _MoneyPageState extends State<MoneyPage> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: isApplePaySelected
-                              ? Color(0xFF54B799)
-                              : Color(0xFFD9D9D9), // สีของเส้นขอบเมื่อเลือก
+                              ? const Color(0xFF54B799)
+                              : const Color(
+                                  0xFFD9D9D9), // สีของเส้นขอบเมื่อเลือก
                           width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
@@ -298,8 +320,9 @@ class _MoneyPageState extends State<MoneyPage> {
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               color: isApplePaySelected
-                                  ? Color(0xFF54B799)
-                                  : Color(0xFF555555), // สีของข้อความเมื่อเลือก
+                                  ? const Color(0xFF54B799)
+                                  : const Color(
+                                      0xFF555555), // สีของข้อความเมื่อเลือก
                               fontFamily: 'Prompt',
                             ),
                           ),
@@ -307,7 +330,7 @@ class _MoneyPageState extends State<MoneyPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   GestureDetector(
                     onTap: _onPayPalTapped,
                     child: Container(
@@ -317,8 +340,9 @@ class _MoneyPageState extends State<MoneyPage> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: isPayPalSelected
-                              ? Color(0xFF54B799)
-                              : Color(0xFFD9D9D9), // สีของเส้นขอบเมื่อเลือก
+                              ? const Color(0xFF54B799)
+                              : const Color(
+                                  0xFFD9D9D9), // สีของเส้นขอบเมื่อเลือก
                           width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
@@ -339,8 +363,9 @@ class _MoneyPageState extends State<MoneyPage> {
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               color: isPayPalSelected
-                                  ? Color(0xFF54B799)
-                                  : Color(0xFF555555), // สีของข้อความเมื่อเลือก
+                                  ? const Color(0xFF54B799)
+                                  : const Color(
+                                      0xFF555555), // สีของข้อความเมื่อเลือก
                               fontFamily: 'Prompt',
                             ),
                           ),
@@ -526,6 +551,7 @@ class _MoneyPageState extends State<MoneyPage> {
     } else if (check == 1) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: const Text(
             'สำเร็จ',
@@ -592,6 +618,11 @@ class _MoneyPageState extends State<MoneyPage> {
             FilledButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MainUserPage(),
+                    ));
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(

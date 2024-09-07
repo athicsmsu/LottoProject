@@ -3,10 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/lottowin.dart';
-import 'package:lotto_application/pages/user/main.dart';
-import 'package:lotto_application/pages/user/profile.dart';
-import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +16,7 @@ class LottoPage extends StatefulWidget {
 
 class _LottoPageState extends State<LottoPage> {
 
+  MenuUser menu = const MenuUser();
   TextEditingController numLottoCtl = TextEditingController();
   List<String> lottoList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
   late Future<void> loadData;
@@ -27,10 +25,9 @@ class _LottoPageState extends State<LottoPage> {
 
   @override
   void initState() {
-    //super.initState();
+    super.initState();
     loadData = loadDataAsync();
     user = context.read<Appdata>().user;
-    log(user.id.toString());
   }
   @override
   Widget build(BuildContext context) {
@@ -504,170 +501,7 @@ class _LottoPageState extends State<LottoPage> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2.5),
-              width: 400,
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD9D9D9), // สีพื้นหลัง
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ), // ขอบมนที่ด้านบน
-              ),
-              child: Stack(
-                clipBehavior:
-                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainUserPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.home,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'หน้าหลัก',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RewardPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.emoji_events,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'รางวัล',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // ช่องว่างสำหรับตรงกลาง
-                      const SizedBox(
-                          width: 80), // เว้นช่องว่างตรงกลางสำหรับไอคอนใหญ่
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LottoWinPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.attach_money,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'ขึ้นเงิน',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfilePage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'โปรไฟล์',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
-                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFF54B799),
-                        border: Border.all(
-                          color: const Color(0xFF125B4D),
-                          width: 5, // ขนาดของเส้นขอบ
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
-                        child: Icon(
-                          Icons.local_activity_sharp,
-                          size: 50,
-                          color:
-                              Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          menu,
         ]),
       ),
     );

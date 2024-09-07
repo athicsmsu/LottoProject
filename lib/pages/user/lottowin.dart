@@ -2,10 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/lotto.dart';
-import 'package:lotto_application/pages/user/main.dart';
-import 'package:lotto_application/pages/user/profile.dart';
-import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +14,7 @@ class LottoWinPage extends StatefulWidget {
 }
 
 class _LottoWinPageState extends State<LottoWinPage> {
+  MenuUser menu = const MenuUser();
   List<String> wonLottoList = []; // ลิสต์สำหรับเก็บรายการที่ถูกรางวัล
   late Future<void> loadData;
   late MemberProfile user;
@@ -427,170 +425,7 @@ class _LottoWinPageState extends State<LottoWinPage> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2.5),
-              width: 400,
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD9D9D9), // สีพื้นหลัง
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ), // ขอบมนที่ด้านบน
-              ),
-              child: Stack(
-                clipBehavior:
-                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainUserPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.home,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'หน้าหลัก',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RewardPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.emoji_events,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'รางวัล',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // ช่องว่างสำหรับตรงกลาง
-                      const SizedBox(
-                          width: 80), // เว้นช่องว่างตรงกลางสำหรับไอคอนใหญ่
-                      const Column(
-                        children: [
-                          Icon(
-                            Icons.attach_money,
-                            size: 40,
-                            color: Color(0xFF54B799),
-                          ),
-                          Text(
-                            'ขึ้นเงิน',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF54B799),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfilePage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'โปรไฟล์',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
-                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LottoPage(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFF777777),
-                          border: Border.all(
-                            color: const Color(0xFF666666),
-                            width: 5, // ขนาดของเส้นขอบ
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
-                          child: Icon(
-                            Icons.local_activity_sharp,
-                            size: 50,
-                            color:
-                                Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          menu,
         ]),
       ),
     );

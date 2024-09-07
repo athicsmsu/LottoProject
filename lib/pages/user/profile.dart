@@ -1,12 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/utils.dart';
 import 'package:lotto_application/pages/changepassword.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/user/lottowin.dart';
-import 'package:lotto_application/pages/user/lotto.dart';
-import 'package:lotto_application/pages/user/main.dart';
-import 'package:lotto_application/pages/user/reward.dart';
+import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  MenuUser menu = const MenuUser();
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
@@ -29,7 +29,11 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     user = context.read<Appdata>().user;
     log(user.id.toString());
+    nameCtl.text = user.fullname;
+    emailCtl.text = user.email;
+    phoneCtl.text = user.phone;
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -108,8 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             child: ClipOval(
-                              child: Image.asset(
-                                'assets/images/LottoLogo.jpg',
+                              child: Image.network(
+                                user.image,
                                 width: 160, // กำหนดความกว้างของรูปภาพ
                                 height: 160, // กำหนดความสูงของรูปภาพ
                                 fit: BoxFit.cover,
@@ -123,7 +127,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               width: 40, // กำหนดความกว้างของวงกลมเล็ก
                               height: 40, // กำหนดความสูงของวงกลมเล็ก
                               decoration: BoxDecoration(
-                                color: Color(0xFF54B799), // สีพื้นหลังของวงกลมเล็ก
+                                color:
+                                    Color(0xFF54B799), // สีพื้นหลังของวงกลมเล็ก
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Colors.white, // สีของกรอบวงกลมเล็ก
@@ -245,13 +250,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               fillColor: const Color(0xFFD9D9D9),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0))),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(
+                                10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
+                          ],
                         ),
                       ],
                     )),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, bottom: 10),
                   child: FilledButton(
-                      onPressed: () => save(),
+                      onPressed: () => dialog(),
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
                             const Size(160, 44)), // กำหนดขนาดของปุ่ม
@@ -290,220 +299,190 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2.5),
-              width: 400,
-              height: 70,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD9D9D9), // สีพื้นหลัง
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ), // ขอบมนที่ด้านบน
-              ),
-              child: Stack(
-                clipBehavior:
-                    Clip.none, // อนุญาตให้มีการวางซ้อนออกนอกขอบ Container
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainUserPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.home,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'หน้าหลัก',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RewardPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.emoji_events,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'รางวัล',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // ช่องว่างสำหรับตรงกลาง
-                      const SizedBox(
-                          width: 80), // เว้นช่องว่างตรงกลางสำหรับไอคอนใหญ่
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LottoWinPage(),
-                            ),
-                          );
-                        },
-                        child: const Column(
-                          children: [
-                            Icon(
-                              Icons.attach_money,
-                              size: 40,
-                              color: Color(0xFF555555),
-                            ),
-                            Text(
-                              'ขึ้นเงิน',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF555555),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Column(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Color(0xFF54B799),
-                          ),
-                          Text(
-                            'โปรไฟล์',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF54B799),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: -40, // วางตำแหน่งไอคอนให้อยู่เหนือขอบของ Container
-                    left: 140, // ปรับตำแหน่งเพื่อให้ไอคอนอยู่ตรงกลาง
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LottoPage(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: const Color(0xFF777777),
-                          border: Border.all(
-                            color: const Color(0xFF666666),
-                            width: 5, // ขนาดของเส้นขอบ
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15), // ระยะห่างจากขอบไอคอน
-                          child: Icon(
-                            Icons.local_activity_sharp,
-                            size: 50,
-                            color:
-                                Color(0xFFFFFFFF), // เปลี่ยนสีของไอคอนได้ที่นี่
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          menu,
         ]),
       ),
     );
   }
+
   void save() {
-    
     log(nameCtl.text);
     log(emailCtl.text);
     log(phoneCtl.text);
+  }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'สำเร็จ',
-          style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF139D51),
-              fontFamily: "Prompt",
-              letterSpacing: 1),
-        ),
-        content: const Text(
-          'บันทึกข้อมูลเสร็จสิ้น',
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1E1E1E),
-              fontFamily: "Prompt",
-              letterSpacing: 1),
-        ),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                  const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
-            ),
-            child: const Text('ปิด',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFFFFFF),
-                    fontFamily: "Prompt",
-                    letterSpacing: 1)),
+  void dialog() {
+    if (nameCtl.text.isEmpty ||
+        emailCtl.text.isEmpty ||
+        phoneCtl.text.isEmpty) {
+          showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
           ),
-        ],
-      ),
-    );
+          content: const Text(
+            'คุณกรอกข้อมูลไม่ครบ',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (phoneCtl.text.length < 10 ||
+        !RegExp(r'^[0-9]+$').hasMatch(phoneCtl.text)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'หมายเลขโทรศัพท์ไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (!GetUtils.isEmail(emailCtl.text)) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'อีเมลไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'สำเร็จ',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF139D51),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'บันทึกข้อมูลเสร็จสิ้น',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1E1E1E),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

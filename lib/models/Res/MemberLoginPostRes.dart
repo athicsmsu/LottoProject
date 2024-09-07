@@ -1,36 +1,53 @@
 // To parse this JSON data, do
 //
-//     final memberLoginPostResponse = memberLoginPostResponseFromJson(jsonString);
+//     final memberLoginPostRes = memberLoginPostResFromJson(jsonString);
 
 import 'dart:convert';
 
-MemberLoginPostResponse memberLoginPostResponseFromJson(String str) =>
-    MemberLoginPostResponse.fromJson(json.decode(str));
+MemberLoginPostRes memberLoginPostResFromJson(String str) => MemberLoginPostRes.fromJson(json.decode(str));
 
-String memberLoginPostResponseToJson(MemberLoginPostResponse data) =>
-    json.encode(data.toJson());
+String memberLoginPostResToJson(MemberLoginPostRes data) => json.encode(data.toJson());
 
-class MemberLoginPostResponse {
-  String message;
-  int id;
-  String type;
+class MemberLoginPostRes {
+    String message;
+    int id;
+    String name;
+    String phone;
+    String image;
+    String email;
+    var walletBalance;
+    String type;
 
-  MemberLoginPostResponse({
-    required this.message,
-    required this.id,
-    required this.type,
-  });
+    MemberLoginPostRes({
+        required this.message,
+        required this.id,
+        required this.name,
+        required this.phone,
+        required this.image,
+        required this.email,
+        required this.walletBalance,
+        required this.type,
+    });
 
-  factory MemberLoginPostResponse.fromJson(Map<String, dynamic> json) =>
-      MemberLoginPostResponse(
+    factory MemberLoginPostRes.fromJson(Map<String, dynamic> json) => MemberLoginPostRes(
         message: json["message"],
         id: json["id"],
+        name: json["name"],
+        phone: json["phone"],
+        image: json["image"],
+        email: json["email"],
+        walletBalance: json["wallet_balance"]?.toDouble(),
         type: json["Type"],
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "message": message,
         "id": id,
+        "name": name,
+        "phone": phone,
+        "image": image,
+        "email": email,
+        "wallet_balance": walletBalance,
         "Type": type,
-      };
+    };
 }

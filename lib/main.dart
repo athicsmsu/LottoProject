@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/admin/main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-  
 
+void main() async {
+
+  await GetStorage.init();
+  
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
