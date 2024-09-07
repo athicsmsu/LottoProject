@@ -91,18 +91,21 @@ class _MainAdminPageState extends State<MainAdminPage> {
                         ),
                       ],
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white, // สีพื้นหลัง
-                        border: Border.all(
-                          color: Color(0xFF54B799), // สีของเส้นขอบ
-                          width: 2.0, // ความหนาของเส้นขอบ
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white, // สีพื้นหลัง
+                          border: Border.all(
+                            color: Color(0xFF54B799), // สีของเส้นขอบ
+                            width: 2.0, // ความหนาของเส้นขอบ
+                          ),
                         ),
-                      ),
-                      child: const SizedBox(
-                        width: 400,
-                        height: 400,
-                        child: Text(""),
+                        child: const SizedBox(
+                          width: 400,
+                          height: 550,
+                          child: Text(""),
+                        ),
                       ),
                     ),
                     FilledButton(
