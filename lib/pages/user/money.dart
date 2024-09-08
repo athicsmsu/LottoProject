@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lotto_application/pages/user/main.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Req/AddMoneyPutReq.dart';
 import 'package:lotto_application/shared/app_data.dart';
-import 'package:provider/provider.dart'; // เพิ่ม import นี้สำหรับ TextInputFormatter
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MoneyPage extends StatefulWidget {
   const MoneyPage({super.key});
@@ -12,7 +18,9 @@ class MoneyPage extends StatefulWidget {
 }
 
 class _MoneyPageState extends State<MoneyPage> {
+  GetStorage storage = GetStorage();
   late MemberProfile user;
+  String url = '';
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
 
@@ -32,7 +40,8 @@ class _MoneyPageState extends State<MoneyPage> {
     if (txtPhone.length > 3 && txtPhone.length <= 6) {
       txtPhone = '${txtPhone.substring(0, 3)}-${txtPhone.substring(3)}';
     } else if (txtPhone.length > 6) {
-      txtPhone = '${txtPhone.substring(0, 3)}-${txtPhone.substring(3, 6)}-${txtPhone.substring(6, txtPhone.length)}';
+      txtPhone =
+          '${txtPhone.substring(0, 3)}-${txtPhone.substring(3, 6)}-${txtPhone.substring(6, txtPhone.length)}';
     }
     phoneCtl.text = txtPhone;
   }
@@ -423,7 +432,7 @@ class _MoneyPageState extends State<MoneyPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      addMoney();
+                      dialog();
                     },
                     child: Row(
                       children: [
@@ -504,7 +513,7 @@ class _MoneyPageState extends State<MoneyPage> {
     );
   }
 
-  void addMoney() {
+  void dialog() {
     const check = 1;
     if (phoneCtl.text.isEmpty || moneyCtl.text.isEmpty) {
       showDialog(
@@ -574,7 +583,7 @@ class _MoneyPageState extends State<MoneyPage> {
           actions: [
             FilledButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                addMoney();
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
@@ -618,11 +627,6 @@ class _MoneyPageState extends State<MoneyPage> {
             FilledButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainUserPage(),
-                    ));
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
@@ -640,6 +644,22 @@ class _MoneyPageState extends State<MoneyPage> {
         ),
       );
     }
+  }
+
+  void addMoney() async {
+    moneyCtl.text = moneyCtl.text.replaceAll(' บาท', '');
+    phoneCtl.text = phoneCtl.text.replaceAll('-', '');
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    AddMoneyPutReq addMoneyPutReq =
+        AddMoneyPutReq(phone: phoneCtl.text, amount: int.parse(moneyCtl.text));
+    var data = await http.put(Uri.parse('$url/member/deposit'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode(addMoneyPutReq));
+    log(data.body);
+    user.wallet_balance = user.wallet_balance + int.parse(moneyCtl.text);
+    storage.write('walletBalance', user.wallet_balance);
+    Navigator.of(context).pop();
   }
 }
 

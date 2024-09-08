@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lotto_application/models/Res/MemberCheckGetRes.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/OrderGetRes.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
@@ -10,6 +11,7 @@ import 'package:lotto_application/pages/user/mylotto.dart';
 import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MainUserPage extends StatefulWidget {
   const MainUserPage({super.key});
@@ -22,12 +24,14 @@ class _MainUserPageState extends State<MainUserPage> {
   MenuUser menu = const MenuUser();
   int numnews = 1;
   String hideMoneytxt = 'ดูยอดเงิน';
-  List<MemberCheckGetRes> users = [];
+  List<OrderGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
 
   String url = '';
   String nummoney = 'XX.XX';
   String txtPhone = '';
   late MemberProfile user;
+
+  late Future<void> loadData;
 
   @override
   void initState() {
@@ -53,6 +57,7 @@ class _MainUserPageState extends State<MainUserPage> {
 
       txtPhone = '$part1-$part2-$part3';
     }
+    loadData = loadDataAsync();
   }
 
   @override
@@ -364,57 +369,96 @@ class _MainUserPageState extends State<MainUserPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            context.read<Appdata>().page = "MyLotto";
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MyLottoPage(),
-                                ));
-                          },
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/images/LottoLogo.jpg',
-                              width: 70, // กำหนดความกว้างของรูปภาพ
-                              height: 70, // กำหนดความสูงของรูปภาพ
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Container(
-                          width:
-                              70, // กำหนดขนาดของ Container (เช่น ขนาดเดียวกับ ClipOval)
-                          height: 70,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF54B799).withOpacity(
-                                0.5), // สีพื้นหลังใส (0.5 คือความโปร่งใส)
-                            shape: BoxShape.circle, // ทำให้ Container มีขอบมน
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              context.read<Appdata>().page = "LottoPage";
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LottoPage(),
-                                  ));
-                            },
-                            child: ClipOval(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white.withOpacity(0.5),
-                                size: 60,
+                    child: FutureBuilder(
+                      future: loadData,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Column(
+                            children: [
+                              Center(
+                                child: CircularProgressIndicator(),
                               ),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 150),
+                                Text(
+                                  'เกิดข้อผิดพลาดในการโหลดข้อมูล',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF444444),
+                                      fontFamily: "Prompt",
+                                      letterSpacing: 1),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      ],
+                          );
+                        } else {
+                          return Row(
+                            children: [
+                              ...purchaseList
+                                  .map((purchase) => Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: GestureDetector(
+                                          onTap: () {
+                                            context.read<Appdata>().page =
+                                                "MyLotto";
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const MyLottoPage(),
+                                                ));
+                                          },
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              'assets/images/LottoLogo.jpg',
+                                              width:
+                                                  70, // กำหนดความกว้างของรูปภาพ
+                                              height: 70, // กำหนดความสูงของรูปภาพ
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                  ))
+                                  .toList(),
+                              const SizedBox(
+                                  width: 5), // เว้นระยะระหว่าง widget
+                              Container(
+                                width: 70, // กำหนดขนาดของ Container
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF54B799)
+                                      .withOpacity(0.5), // สีพื้นหลังใส
+                                  shape: BoxShape
+                                      .circle, // ทำให้ Container มีขอบมน
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    context.read<Appdata>().page = "LottoPage";
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LottoPage(),
+                                        ));
+                                  },
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.white.withOpacity(0.5),
+                                    size: 60,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -425,5 +469,16 @@ class _MainUserPageState extends State<MainUserPage> {
         ),
       ),
     );
+  }
+
+  Future<void> loadDataAsync() async {
+    await Future.delayed(const Duration(seconds: 2));
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));
+    purchaseList = orderGetResFromJson(data.body);
+    if (purchaseList.length > 4) {
+      purchaseList = purchaseList.sublist(0, 4); // เก็บเฉพาะ 5 รายการแรก
+    }
   }
 }
