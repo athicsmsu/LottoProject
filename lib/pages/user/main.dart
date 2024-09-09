@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/OrderGetRes.dart';
@@ -65,7 +66,7 @@ class _MainUserPageState extends State<MainUserPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        log('ถอยกลับไม่ได้');
+        log('can not back');
       },
       child: MaterialApp(
         theme: ThemeData(
@@ -472,7 +473,7 @@ class _MainUserPageState extends State<MainUserPage> {
   }
 
   Future<void> loadDataAsync() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
     var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));

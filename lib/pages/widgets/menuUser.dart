@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/user/lottowin.dart';
+import 'package:lotto_application/pages/user/claimprize.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
@@ -136,7 +136,7 @@ class _MenuUserState extends State<MenuUser> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LottoWinPage(),
+                          builder: (context) => const ClaimPrizePage(),
                         ),
                       );
                     }

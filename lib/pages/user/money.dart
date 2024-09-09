@@ -23,7 +23,6 @@ class _MoneyPageState extends State<MoneyPage> {
   String url = '';
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController moneyCtl = TextEditingController();
-
   bool isApplePaySelected = true;
   bool isPayPalSelected = false;
 
@@ -432,7 +431,7 @@ class _MoneyPageState extends State<MoneyPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      dialog();
+                      dialog(1);
                     },
                     child: Row(
                       children: [
@@ -513,8 +512,7 @@ class _MoneyPageState extends State<MoneyPage> {
     );
   }
 
-  void dialog() {
-    const check = 1;
+  void dialog(int check) {
     if (phoneCtl.text.isEmpty || moneyCtl.text.isEmpty) {
       showDialog(
         context: context,
@@ -557,7 +555,12 @@ class _MoneyPageState extends State<MoneyPage> {
           ],
         ),
       );
-    } else if (check == 1) {
+    } else if (check == 0) {
+      Navigator.of(context).pop();
+    } else if(check == 1){
+      addMoney();
+    }
+    else if (check == 2) {
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -583,8 +586,8 @@ class _MoneyPageState extends State<MoneyPage> {
           actions: [
             FilledButton(
               onPressed: () {
-                addMoney();
-                Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  dialog(0);
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
@@ -626,6 +629,18 @@ class _MoneyPageState extends State<MoneyPage> {
           actions: [
             FilledButton(
               onPressed: () {
+                 _updateText(moneyCtl.text);
+                if (phoneCtl.text.length > 3 && phoneCtl.text.length <= 6) {
+                  phoneCtl.text = phoneCtl.text.substring(0, 3) +
+                      '-' +
+                      phoneCtl.text.substring(3);
+                } else if (phoneCtl.text.length > 6) {
+                  phoneCtl.text = phoneCtl.text.substring(0, 3) +
+                      '-' +
+                      phoneCtl.text.substring(3, 6) +
+                      '-' +
+                      phoneCtl.text.substring(6, phoneCtl.text.length);
+                }
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
@@ -657,9 +672,21 @@ class _MoneyPageState extends State<MoneyPage> {
         headers: {"Content-Type": "application/json; charset=utf-8"},
         body: jsonEncode(addMoneyPutReq));
     log(data.body);
-    user.wallet_balance = user.wallet_balance + int.parse(moneyCtl.text);
-    storage.write('walletBalance', user.wallet_balance);
-    Navigator.of(context).pop();
+
+     // แปลง data.body จาก JSON string ไปเป็น JSON object
+    var responseBody = jsonDecode(data.body);
+    log(responseBody['message']);
+    if(responseBody['message'] == 'Funds added successfully'){
+      dialog(2);
+      if(phoneCtl.text == user.phone){
+        user.wallet_balance = user.wallet_balance + int.parse(moneyCtl.text);
+        storage.write('walletBalance', user.wallet_balance);
+      } else {
+        
+      }
+    } else {
+      dialog(3);
+    }
   }
 }
 

@@ -1,9 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
+import 'package:lotto_application/models/Res/OrderGetRes.dart';
 import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MyLottoPage extends StatefulWidget {
   const MyLottoPage({super.key});
@@ -14,10 +18,11 @@ class MyLottoPage extends StatefulWidget {
 
 class _MyLottoPageState extends State<MyLottoPage> {
   MenuUser menu = const MenuUser();
-  List<String> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
+  List<OrderGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
+  List<String> myLottoList = [];
   late Future<void> loadData;
-
- late MemberProfile user;
+  String url = '';
+  late MemberProfile user;
 
   @override
   void initState() {
@@ -88,8 +93,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
                             ),
                           ),
                           child: ClipOval(
-                            child: Image.asset(
-                              'assets/images/LottoLogo.jpg',
+                            child: Image.network(
+                              user.image,
                               width: 80, // กำหนดความกว้างของรูปภาพ
                               height: 80, // กำหนดความสูงของรูปภาพ
                               fit: BoxFit.cover,
@@ -97,12 +102,12 @@ class _MyLottoPageState extends State<MyLottoPage> {
                           ),
                         ),
                         const SizedBox(width: 30),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'คุณ ยงยอด แสนดี',
-                              style: TextStyle(
+                              'คุณ ${user.fullname}',
+                              style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF54B799),
@@ -110,8 +115,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                   letterSpacing: 1),
                             ),
                             Text(
-                              '21.00 บาท',
-                              style: TextStyle(
+                              '${user.wallet_balance} บาท',
+                              style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFD9D9D9),
@@ -215,9 +220,10 @@ class _MyLottoPageState extends State<MyLottoPage> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 100),
                           child: Column(
-                            children: purchaseList
+                            children: myLottoList
                                 .map((purchase) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 10),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
                                       child: Container(
                                         width:
                                             400, // Adjust the width according to your needs
@@ -238,8 +244,10 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 10, horizontal: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
                                               child: Stack(
                                                 children: [
                                                   Image.asset(
@@ -338,8 +346,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                                         color: const Color(
                                                             0xFFDAE924), // สีพื้นหลังของช่องหมายเลข
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                3.0),
+                                                            BorderRadius
+                                                                .circular(3.0),
                                                       ),
                                                       child: Text(
                                                         purchase, // Display the lottery number
@@ -385,7 +393,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                               decoration: const BoxDecoration(
                                                 color: Color(0xFF005A24),
                                                 borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(6.0),
+                                                  topRight:
+                                                      Radius.circular(6.0),
                                                   bottomRight:
                                                       Radius.circular(6.0),
                                                 ),
@@ -412,15 +421,17 @@ class _MyLottoPageState extends State<MyLottoPage> {
   }
 
   Future<void> loadDataAsync() async {
-    await Future.delayed(const Duration(seconds: 2));
-    // var value = await Configuration.getConfig();
-    // url = value['apiEndpoint'];
-    // //call api /trips
-    // var data = await http.get(Uri.parse('$url/users/${widget.idx}'));
-    // trip = tripGetByIdResponseFromJson(data.body);
-    purchaseList.add("145874");
-    purchaseList.add("145874");
-    // purchaseList.add("145874");
-    // purchaseList.add("145874");
+    await Future.delayed(const Duration(seconds: 1));
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));
+    purchaseList = orderGetResFromJson(data.body);
+
+    for (var i = 0; i < purchaseList.length; i++) {
+      var lotto = await http
+          .get(Uri.parse('$url/lottery?id=${purchaseList[i].lotteryId}'));
+      List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
+      myLottoList.add(numLotto.first.lotteryNumber.toString());
+    }
   }
 }
