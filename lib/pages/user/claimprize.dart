@@ -80,7 +80,8 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
                 size: 40,
               ), // ปุ่มที่อยู่ขวามือ
               onPressed: () {
-                // ฟังก์ชันเมื่อกดปุ่ม settings
+                GetStorage storage = GetStorage();
+                storage.erase();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -494,18 +495,26 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
 
   Future<void> loadDataAsync() async {
     await Future.delayed(const Duration(seconds: 1));
-    var value = await Configuration.getConfig();
-    url = value['apiEndpoint'];
-    var data =
-        await http.get(Uri.parse('$url/Ldraw/checkPrize?member_id=${user.id}'));
-    myLottoWinList = myLottoWinGetResFromJson(data.body);
-
-    for (var i = 0; i < myLottoWinList.length; i++) {
-      var lotto = await http
-          .get(Uri.parse('$url/lottery?id=${myLottoWinList[i].lotteryId}'));
-      List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
-      numLottoList.add(numLotto.first);
+    try {
+      var value = await Configuration.getConfig();
+      url = value['apiEndpoint'];
+      var data = await http
+          .get(Uri.parse('$url/Ldraw/checkPrize?member_id=${user.id}'));
+      if (data.body == 'No lottery draw found for the given lottery_ids') {
+        myLottoWinList = [];
+      }
+      myLottoWinList = myLottoWinGetResFromJson(data.body);
+      for (var i = 0; i < myLottoWinList.length; i++) {
+        var lotto = await http
+            .get(Uri.parse('$url/lottery?id=${myLottoWinList[i].lotteryId}'));
+        List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
+        numLottoList.add(numLotto.first);
+      }
+    } catch (e) {
+      log(e.toString());
     }
+    setState(() {});
+    initState();
   }
 
   claimPrize(int drawId, int money) async {
@@ -559,11 +568,10 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
       );
       user.wallet_balance = user.wallet_balance + money;
       storage.write('walletBalance', user.wallet_balance);
+      loadDataAsync();
     } catch (e) {
       log(e.toString());
     }
-    loadDataAsync();
-    setState(() {});
   }
 
   dialog(int drawId, int money) {

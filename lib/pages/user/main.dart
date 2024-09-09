@@ -88,7 +88,34 @@ class _MainUserPageState extends State<MainUserPage> {
           appBar: AppBar(
             leading: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-              child: Container(
+              child:
+                  // Container(
+                  //   width: 50, // กำหนดความกว้าง
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     border: Border.all(
+                  //       color: const Color(0xFFD9D9D9), // สีของกรอบ
+                  //       width: 5, // ความหนาของกรอบ
+                  //     ),
+                  //   ),
+                  //   child: ClipOval(
+                  //     child: user.image != null
+                  //         ? Image.network(
+                  //             user.image!,
+                  //             width: 40, // กำหนดความกว้างของรูปภาพ
+                  //             height: 40, // กำหนดความสูงของรูปภาพ
+                  //             fit: BoxFit.cover,
+                  //           )
+                  //         : const SizedBox(
+                  //             width: 40,
+                  //             height: 40,
+                  //             child:
+                  //                 CircularProgressIndicator(), // แสดง Loading เมื่อไม่มีรูป
+                  //           ),
+                  //   ),
+                  // ),
+                  Container(
                 width: 50, // กำหนดความกว้าง
                 height: 50,
                 decoration: BoxDecoration(
@@ -105,12 +132,25 @@ class _MainUserPageState extends State<MainUserPage> {
                           width: 40, // กำหนดความกว้างของรูปภาพ
                           height: 40, // กำหนดความสูงของรูปภาพ
                           fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child; // รูปภาพโหลดเสร็จแล้ว
+                            } else {
+                              return const SizedBox(
+                                width: 40,
+                                height: 40,
+                                child:
+                                    CircularProgressIndicator(), // แสดง Loader เมื่อกำลังโหลด
+                              );
+                            }
+                          },
                         )
                       : const SizedBox(
                           width: 40,
                           height: 40,
                           child:
-                              CircularProgressIndicator(), // แสดง Loading เมื่อไม่มีรูป
+                              CircularProgressIndicator(), // แสดง Loader เมื่อไม่มีรูป
                         ),
                 ),
               ),
@@ -404,8 +444,8 @@ class _MainUserPageState extends State<MainUserPage> {
                             children: [
                               ...purchaseList
                                   .map((purchase) => Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: GestureDetector(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: GestureDetector(
                                           onTap: () {
                                             context.read<Appdata>().page =
                                                 "MyLotto";
@@ -421,12 +461,13 @@ class _MainUserPageState extends State<MainUserPage> {
                                               'assets/images/LottoLogo.jpg',
                                               width:
                                                   70, // กำหนดความกว้างของรูปภาพ
-                                              height: 70, // กำหนดความสูงของรูปภาพ
+                                              height:
+                                                  70, // กำหนดความสูงของรูปภาพ
                                               fit: BoxFit.cover,
                                             ),
                                           ),
                                         ),
-                                  ))
+                                      ))
                                   .toList(),
                               const SizedBox(
                                   width: 5), // เว้นระยะระหว่าง widget

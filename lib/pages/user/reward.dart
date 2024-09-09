@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
 import 'package:lotto_application/models/Res/RewardLottoGetRes.dart';
@@ -72,7 +73,8 @@ class _RewardPageState extends State<RewardPage> {
                 size: 40,
               ), // ปุ่มที่อยู่ขวามือ
               onPressed: () {
-                // ฟังก์ชันเมื่อกดปุ่ม settings
+                GetStorage storage = GetStorage();
+                storage.erase();
                 Navigator.push(
                     context,
                     MaterialPageRoute(

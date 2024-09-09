@@ -153,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0))),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(
-                                10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
+                            // LengthLimitingTextInputFormatter(
+                            //     10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
                           ],
                         ),
                       ],
@@ -278,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                 letterSpacing: 1),
           ),
           content: const Text(
-            'โปรดใส่อีเมลหรือรหัสผ่าน',
+            'โปรดใส่หมายเลขโทรศัพท์หรือรหัสผ่าน',
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -323,7 +323,6 @@ class _LoginPageState extends State<LoginPage> {
           user.phone = member.phone;
           user.image = member.image;
           user.email = member.email;
-
           if (member.walletBalance is int) {
             // ถ้า member.money เป็น int แปลงเป็น double
             user.wallet_balance = (member.walletBalance as int).toDouble();
@@ -367,7 +366,7 @@ class _LoginPageState extends State<LoginPage> {
                   letterSpacing: 1),
             ),
             content: const Text(
-              'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+              'หมายเลขโทรศัพท์หรือรหัสผ่านไม่ถูกต้อง',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
