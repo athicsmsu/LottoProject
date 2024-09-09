@@ -17,6 +17,7 @@ class RewardLottoGetRes {
   int lotteryId;
   int prizeStatus;
   int prizeAmount;
+  String isReceived;
 
   RewardLottoGetRes({
     required this.drawId,
@@ -24,6 +25,7 @@ class RewardLottoGetRes {
     required this.lotteryId,
     required this.prizeStatus,
     required this.prizeAmount,
+    required this.isReceived,
   });
 
   factory RewardLottoGetRes.fromJson(Map<String, dynamic> json) =>
@@ -33,6 +35,7 @@ class RewardLottoGetRes {
         lotteryId: json["lottery_id"],
         prizeStatus: json["prize_status"],
         prizeAmount: json["prize_amount"],
+        isReceived: json["is_received"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +44,6 @@ class RewardLottoGetRes {
         "lottery_id": lotteryId,
         "prize_status": prizeStatus,
         "prize_amount": prizeAmount,
+        "is_received": isReceived,
       };
 }

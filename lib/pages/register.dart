@@ -410,6 +410,91 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       );
+    } else if (passwordCtl.text.trim().isEmpty ||
+        passwordCtl.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'รหัสผ่านไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (nameCtl.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'ชื่อผู้ใช้ไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
     } else if (confirmpasswordCtl.text != passwordCtl.text) {
       showDialog(
         context: context,

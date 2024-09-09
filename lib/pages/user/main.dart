@@ -479,7 +479,7 @@ class _MainUserPageState extends State<MainUserPage> {
     var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));
     purchaseList = orderGetResFromJson(data.body);
     if (purchaseList.length > 4) {
-      purchaseList = purchaseList.sublist(0, 4); // เก็บเฉพาะ 5 รายการแรก
+      purchaseList = purchaseList.sublist(0, 4); // เก็บเฉพาะ 4 รายการแรก
     }
   }
 }
