@@ -84,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 GetStorage storage = GetStorage();
                 storage.erase();
+                context.read<Appdata>().page = '';
                 Navigator.push(
                     context,
                     MaterialPageRoute(
