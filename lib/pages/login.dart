@@ -3,8 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/MemberLoginPostReq.dart';
@@ -54,8 +52,8 @@ class _LoginPageState extends State<LoginPage> {
       user.email = storage.read('email');
       user.wallet_balance = storage.read('walletBalance');
       context.read<Appdata>().user = user;
-      context.read<Appdata>().page = 'mainUser';
       if (userStatus == 'member') {
+        context.read<Appdata>().page = 'mainUser';
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.push(
               context,
@@ -65,7 +63,11 @@ class _LoginPageState extends State<LoginPage> {
         });
       } else if (userStatus == 'admin') {
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          Get.to(() => const MainAdminPage());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MainAdminPage(),
+              ));
         });
       }
     } catch (e) {
@@ -152,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                               fillColor: const Color(0xFFD9D9D9),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0))),
-                          inputFormatters: [
+                          inputFormatters: const [
                             // LengthLimitingTextInputFormatter(
                             //     10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
                           ],
@@ -315,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             body: jsonEncode(data));
         var member = memberLoginPostResFromJson(value.body);
-        log(member.message);
+        log(member.type);
         if (member.type == 'member') {
           context.read<Appdata>().page = 'mainUser';
           user.id = member.id;
@@ -345,7 +347,28 @@ class _LoginPageState extends State<LoginPage> {
                 builder: (context) => const MainUserPage(),
               ));
         } else if (member.type == 'admin') {
+          context.read<Appdata>().page = 'mainAdmin';
+          user.id = member.id;
+          user.fullname = member.name;
+          user.phone = member.phone;
+          user.image = member.image;
+          user.email = member.email;
+          if (member.walletBalance is int) {
+            // ถ้า member.money เป็น int แปลงเป็น double
+            user.wallet_balance = (member.walletBalance as int).toDouble();
+          } else if (member.walletBalance is double) {
+            // ถ้า member.money เป็น double กำหนดค่าโดยตรง
+            user.wallet_balance = member.walletBalance;
+          }
+
           storage.write('userStatus', member.type);
+          storage.write('id', member.id);
+          storage.write('name', member.name);
+          storage.write('phone', member.phone);
+          storage.write('image', member.image);
+          storage.write('email', member.email);
+          context.read<Appdata>().user = user;
+          storage.write('walletBalance', user.wallet_balance);
           Navigator.push(
               context,
               MaterialPageRoute(

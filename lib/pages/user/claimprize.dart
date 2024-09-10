@@ -527,6 +527,7 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
       var value = await http.put(Uri.parse('$url/member/claimPrize'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: jsonEncode(data));
+          log(value.body);
       showDialog(
         context: context,
         barrierDismissible: false,
