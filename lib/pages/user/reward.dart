@@ -222,6 +222,8 @@ class _RewardPageState extends State<RewardPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
+                                          width:
+                                              300, // กำหนดความกว้างของกรอบทั้งหมดให้เท่ากัน
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 12.0, vertical: 8.0),
                                           decoration: BoxDecoration(
@@ -236,25 +238,21 @@ class _RewardPageState extends State<RewardPage> {
                                             ),
                                           ),
                                           child: Row(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .spaceEvenly, // กระจายตัวเลขให้มีช่องว่างเท่ากัน
                                             children: [
                                               for (var digit in lottoList[
                                                       reward.prizeStatus - 1]
                                                   .split(''))
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15.0),
-                                                  child: Text(
-                                                    digit,
-                                                    style: const TextStyle(
-                                                        fontSize: 25,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            Color(0xFF1E1E1E),
-                                                        fontFamily: "Prompt",
-                                                        letterSpacing: 1),
-                                                  ),
+                                                Text(
+                                                  digit,
+                                                  style: const TextStyle(
+                                                      fontSize: 25,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color(0xFF1E1E1E),
+                                                      fontFamily: "Prompt",
+                                                      letterSpacing: 1),
                                                 ),
                                             ],
                                           ),
