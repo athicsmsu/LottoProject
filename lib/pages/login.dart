@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/MemberLoginPostReq.dart';
@@ -55,11 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       if (userStatus == 'member') {
         context.read<Appdata>().page = 'mainUser';
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainUserPage(),
-              ));
+          Get.to(() => const MainUserPage());
         });
       } else if (userStatus == 'admin') {
         SchedulerBinding.instance.addPostFrameCallback((_) {

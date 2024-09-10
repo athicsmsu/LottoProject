@@ -22,8 +22,6 @@ class _MainAdminPageState extends State<MainAdminPage> {
   late Future<void> loadData;
   String url = '';
   String namebutton = '';
-  late MemberProfile user;
-  
   @override
   void initState() {
     // TODO: implement initState
