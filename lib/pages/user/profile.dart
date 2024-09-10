@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/utils.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Req/MemberEditPutReq.dart';
 import 'package:lotto_application/pages/changepassword.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,18 +22,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  GetStorage storage = GetStorage();
   MenuUser menu = const MenuUser();
   TextEditingController nameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
   late Future<void> loadData;
   late MemberProfile user;
+  String url = '';
 
   @override
   void initState() {
     super.initState();
     user = context.read<Appdata>().user;
-    log(user.id.toString());
     nameCtl.text = user.fullname;
     emailCtl.text = user.email;
     phoneCtl.text = user.phone;
@@ -252,10 +257,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               fillColor: const Color(0xFFD9D9D9),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0))),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(
-                                10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
-                          ],
+                          // inputFormatters: [
+                          //   LengthLimitingTextInputFormatter(
+                          //       10), // จำกัดตัวเลขที่ป้อนได้สูงสุด 10 ตัว
+                          // ],
                         ),
                       ],
                     )),
@@ -307,10 +312,27 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void save() {
-    log(nameCtl.text);
-    log(emailCtl.text);
-    log(phoneCtl.text);
+  void save() async{
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = MemberEditPutReq(memberId: user.id, name: nameCtl.text, phone: phoneCtl.text, image: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', email: emailCtl.text);
+    try {
+      var value = await http.put(Uri.parse('$url/member?id=${user.id}'),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: jsonEncode(data));
+      log(value.body);
+      user.fullname = nameCtl.text;
+      user.phone = phoneCtl.text;
+      user.image = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+      user.email = emailCtl.text;
+      context.read<Appdata>().user = user;
+      storage.write('name', user.fullname);
+      storage.write('phone', user.phone);
+      storage.write('image', user.image);
+      storage.write('email', user.email);
+    } catch (eee) {
+      log("Edit Error $eee");
+    }
   }
 
   void dialog() {
@@ -443,7 +465,92 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       );
+    } else if (phoneCtl.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'เบอร์โทรศัพท์ไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (nameCtl.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'ชื่อผู้ใช้ไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
     } else {
+      save();
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

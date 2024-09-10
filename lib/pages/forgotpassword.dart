@@ -1,7 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/MemberCheckGetRes.dart';
 import 'package:lotto_application/pages/otpconfirm.dart';
+import 'package:http/http.dart' as http;
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -12,6 +17,29 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController emailCtl = TextEditingController();
+  List<MemberCheckGetRes> users = [];
+  MemberProfile user = MemberProfile();
+  late Future<void> loadData;
+  String url = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Configuration.getConfig().then(
+      (value) {
+        url = value['apiEndpoint'];
+        log(url);
+      },
+    ).catchError(
+      (error) {
+        log(error);
+      },
+    );
+    loadData = loadDataAsync();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,10 +168,65 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   emailCheck() {
     log("ยืนยัน");
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OtpConfirmPage(),
-        ));
+    for (var member in users) {
+      if (member.email == emailCtl.text) {
+        user.id = member.memberId;
+        context.read<Appdata>().user = user; //อันตรายห้ามลืม
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtpConfirmPage(),
+            ));
+        return;
+      }
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'ผิดพลาด',
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFE84C1B),
+              fontFamily: "Prompt",
+              letterSpacing: 1),
+        ),
+        content: const Text(
+          'ไม่พบอีเมล',
+          style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF000000),
+              fontFamily: "Prompt",
+              letterSpacing: 1),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                  const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+            ),
+            child: const Text('ปิด',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
+                    fontFamily: "Prompt",
+                    letterSpacing: 1)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> loadDataAsync() async {
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var result = await http.get(Uri.parse('$url/member/all'));
+    users = memberCheckGetResFromJson(result.body);
   }
 }

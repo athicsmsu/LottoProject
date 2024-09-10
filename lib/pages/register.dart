@@ -348,7 +348,6 @@ class _RegisterPageState extends State<RegisterPage> {
         password: passwordCtl.text,
         walletBalance: int.parse(moneyCtl.text),
         Type: "member");
-
     try {
       var value = await http.post(Uri.parse('$url/member'),
           headers: {"Content-Type": "application/json; charset=utf-8"},

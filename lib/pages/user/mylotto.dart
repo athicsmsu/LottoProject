@@ -18,8 +18,7 @@ class MyLottoPage extends StatefulWidget {
 
 class _MyLottoPageState extends State<MyLottoPage> {
   MenuUser menu = const MenuUser();
-  List<OrderGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
-  List<String> myLottoList = [];
+  List<LottoAllGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
   late Future<void> loadData;
   String url = '';
   late MemberProfile user;
@@ -178,14 +177,19 @@ class _MyLottoPageState extends State<MyLottoPage> {
                         );
                       } else if (snapshot.hasError) {
                         return const Center(
-                          child: Text(
-                            'เกิดข้อผิดพลาดในการโหลดข้อมูล',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF444444),
-                                fontFamily: "Prompt",
-                                letterSpacing: 1),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 150),
+                              Text(
+                                'เกิดข้อผิดพลาดในการโหลดข้อมูล',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF444444),
+                                    fontFamily: "Prompt",
+                                    letterSpacing: 1),
+                              ),
+                            ],
                           ),
                         );
                       } else if (purchaseList.isEmpty) {
@@ -220,7 +224,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 100),
                           child: Column(
-                            children: myLottoList
+                            children: purchaseList
                                 .map((purchase) => Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 10),
@@ -350,7 +354,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                                                 .circular(3.0),
                                                       ),
                                                       child: Text(
-                                                        purchase, // Display the lottery number
+                                                        purchase.lotteryNumber.toString(), // Display the lottery number
                                                         style: const TextStyle(
                                                           fontSize: 30,
                                                           fontWeight:
@@ -424,14 +428,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
     await Future.delayed(const Duration(seconds: 1));
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
-    var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));
-    purchaseList = orderGetResFromJson(data.body);
-
-    for (var i = 0; i < purchaseList.length; i++) {
-      var lotto = await http
-          .get(Uri.parse('$url/lottery?id=${purchaseList[i].lotteryId}'));
-      List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
-      myLottoList.add(numLotto.first.lotteryNumber.toString());
-    }
+    var data = await http.get(Uri.parse('$url/lottery/allnotClaim?id=${user.id}'));
+    purchaseList = lottoAllGetResFromJson(data.body);
   }
 }

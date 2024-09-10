@@ -400,6 +400,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   forgotPassword() {
+    context.read<Appdata>().user = user;
     Navigator.push(
         context,
         MaterialPageRoute(

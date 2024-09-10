@@ -1,10 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
-import 'package:lotto_application/models/Res/OrderGetRes.dart';
+import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/money.dart';
@@ -25,7 +24,7 @@ class _MainUserPageState extends State<MainUserPage> {
   MenuUser menu = const MenuUser();
   int numnews = 1;
   String hideMoneytxt = 'ดูยอดเงิน';
-  List<OrderGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
+  List<LottoAllGetRes> purchaseList = []; // ลิสต์สำหรับเก็บรายการสั่งซื้อ
 
   String url = '';
   String nummoney = 'XX.XX';
@@ -517,10 +516,7 @@ class _MainUserPageState extends State<MainUserPage> {
     await Future.delayed(const Duration(seconds: 1));
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
-    var data = await http.get(Uri.parse('$url/Lorder?id=${user.id}'));
-    purchaseList = orderGetResFromJson(data.body);
-    if (purchaseList.length > 4) {
-      purchaseList = purchaseList.sublist(0, 4); // เก็บเฉพาะ 4 รายการแรก
-    }
+    var data = await http.get(Uri.parse('$url/lottery/allnotClaim?id=${user.id}'));
+    purchaseList = lottoAllGetResFromJson(data.body);
   }
 }
