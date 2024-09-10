@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
+import 'package:lotto_application/models/Res/RewardLottoGetRes.dart';
 import 'package:lotto_application/pages/admin/adward.dart';
 import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/admin/profile.dart';
+import 'package:http/http.dart' as http;
 
 class SettingAdminPage extends StatefulWidget {
   const SettingAdminPage({super.key});
@@ -11,6 +15,18 @@ class SettingAdminPage extends StatefulWidget {
 }
 
 class _SettingAdminPageState extends State<SettingAdminPage> {
+  final int numberOfRows = 5;
+  List<String> lottoList = [];
+  List<RewardLottoGetRes> rewardLotto = [];
+  late Future<void> loadData;
+  String url = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData = loadDataAsync();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -285,175 +301,45 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                                 ),
                               ],
                             ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "รางวัลที่ 1",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
+                            ...List.generate(
+                              numberOfRows,
+                              (index) => TableRow(
+                                children: <Widget>[
+                                  Center(
+                                    child: Container(
+                                      height: 60,
+                                      alignment: Alignment
+                                          .center, // จัดให้อยู่กลางแนวตั้ง
+                                      child: Text(
+                                        "รางวัลที่ ${index + 1}", // ใช้ index เพื่อแสดงหมายเลขรางวัล
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
+                                          fontFamily: "Prompt",
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
+                                  Center(
+                                    child: Container(
+                                        height: 60,
+                                        alignment: Alignment
+                                            .center, // จัดให้อยู่กลางแนวตั้ง
+                                        child: FutureBuilder(
+                                          future: loadData,
+                                          builder: (context, snapshot) {
+                                            if (rewardLotto.isEmpty) {
+                                              return Text("XXXXXX");
+                                            } else {
+                                              return Container(
+                                                  child:
+                                                      Text(lottoList[index]));
+                                            }
+                                          },
+                                        )),
                                   ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "รางวัลที่ 2",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "รางวัลที่ 3",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "รางวัลที่ 4",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "รางวัลที่ 5",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -648,5 +534,20 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
         );
       },
     );
+  }
+
+  Future<void> loadDataAsync() async {
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = await http.get(Uri.parse('$url/Ldraw/all'));
+    rewardLotto = rewardLottoGetResFromJson(data.body);
+
+    for (var i = 0; i < rewardLotto.length; i++) {
+      var lotto = await http
+          .get(Uri.parse('$url/lottery?id=${rewardLotto[i].lotteryId}'));
+      List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
+      lottoList.add(numLotto.first.lotteryNumber.toString());
+    }
+    setState(() {});
   }
 }

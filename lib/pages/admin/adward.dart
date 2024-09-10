@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
@@ -7,7 +10,7 @@ import 'package:lotto_application/pages/admin/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/admin/setting.dart';
 
-const List<String> list = <String>['ทั้งหมด', 'ขายไปแล้ว'];
+List<String> list = <String>['ทั้งหมด', 'ขายไปแล้ว'];
 
 class AdwardAdminPage extends StatefulWidget {
   const AdwardAdminPage({super.key});
@@ -437,58 +440,152 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
     );
   }
 
-  Future<void> _dialogBuilder(BuildContext context) {
-    int check = 0;
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Icon(Icons.warning_amber, color: Colors.red),
-          content: const Text("ต้องการสุ่มรางวัลใหม่ใช่หรือไม่"),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('ยกเลิก'),
-              onPressed: () {
-                check = 0; // Set check to 0 for Disable
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('ตกลง'),
-              onPressed: () {
-                check = 1; // Set check to 1 for Enable
-                Navigator.of(context).pop();
-                // Show success dialog after closing the current dialog
-                if (check == 1) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('สำเร็จ'),
-                      content: const Text('สุ่มรางวัลใหม่เรียบร้อยแล้ว'),
-                      actions: [
-                        FilledButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            'ปิด',
-                            style: TextStyle(
-                              color:
-                                  Colors.white, // Set the text color to white
-                            ),
+  Future<void> _callSoldOutApi() async {
+  // เรียก API สำหรับ "ขายไปแล้ว"
+  try {
+    // แสดงข้อความเมื่อเรียก API
+    log("Calling Sold Out API");
+
+    // ดึงค่า config จาก Configuration
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+
+    // ส่ง POST request ไปยัง API
+    var response = await http.post(
+      Uri.parse('$url/Ldraw/randomSold'),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
+    );
+
+    // เช็คสถานะของ response
+    if (response.statusCode == 200) {
+      // ถ้าการเรียก API สำเร็จ (status code 200)
+      log('API call succeeded: ${response.body}');
+    } else {
+      // ถ้าเกิดข้อผิดพลาด
+      log('Failed to call API: ${response.statusCode}');
+    }
+
+    loadDataAsync();
+    setState(() {
+      
+    });
+  } catch (e) {
+    // จับข้อผิดพลาดและแสดง error
+    log('Error occurred: $e');
+  }
+
+}
+
+Future<void> _callAllApi() async {
+  // เรียก API สำหรับ "ทั้งหมด"
+  try {
+    // แสดงข้อความเมื่อเรียก API
+    log("Calling All Out API");
+
+    // ดึงค่า config จาก Configuration
+    var value = await Configuration.getConfig();
+    var url = value['apiEndpoint'];
+
+    // ส่ง POST request ไปยัง API
+    var response = await http.post(
+      Uri.parse('$url/Ldraw/randomAll'),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
+    );
+
+    // เช็คสถานะของ response
+    if (response.statusCode == 200) {
+      // ถ้าการเรียก API สำเร็จ (status code 200)
+      log('API call succeeded: ${response.body}');
+    } else {
+      // ถ้าเกิดข้อผิดพลาด
+      log('Failed to call API: ${response.statusCode}');
+    }
+
+    loadDataAsync();
+    setState(() {
+      
+    });
+  } catch (e) {
+    // จับข้อผิดพลาดและแสดง error
+    log('Error occurred: $e');
+  }
+  
+}
+
+Future<void> _dialogBuilder(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Icon(Icons.warning_amber, color: Colors.red),
+        content: const Text("ต้องการสุ่มรางวัลใหม่ใช่หรือไม่"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('ยกเลิก'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('ตกลง'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (dropdownValue == "ขายไปแล้ว") {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('สำเร็จ'),
+                    content: const Text('Random Number Sold complete'),
+                    actions: [
+                      FilledButton(
+                        onPressed: () async {
+                          await _callSoldOutApi();
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'ปิด',
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+                      ),
+                    ],
+                  ),
+                );
+              }
+              if (dropdownValue == "ทั้งหมด") {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('สำเร็จ'),
+                    content: const Text('Random Number All complete'),
+                    actions: [
+                      FilledButton(
+                        onPressed: () async {
+                          await _callAllApi();
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'ปิด',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
   Future<void> loadDataAsync() async {
     var value = await Configuration.getConfig();
