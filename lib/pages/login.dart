@@ -57,11 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       context.read<Appdata>().page = 'mainUser';
       if (userStatus == 'member') {
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MainUserPage(),
-              ));
+          Get.to(() => const MainUserPage());
         });
       } else if (userStatus == 'admin') {
         SchedulerBinding.instance.addPostFrameCallback((_) {

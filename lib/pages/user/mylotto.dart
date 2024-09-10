@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
-import 'package:lotto_application/models/Res/OrderGetRes.dart';
 import 'package:lotto_application/pages/widgets/menuUser.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
