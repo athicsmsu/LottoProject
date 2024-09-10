@@ -1,6 +1,12 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Req/ChangePasswordPutReq.dart';
+import 'package:lotto_application/shared/app_data.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -13,7 +19,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   TextEditingController passwordCtl = TextEditingController();
   TextEditingController confirmpasswordCtl = TextEditingController();
-
+   String url = '';
+   late MemberProfile user;
+   
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    user = context.read<Appdata>().user;
+    log(user.id.toString());
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -134,7 +149,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                       fontFamily: "Prompt",
                                       letterSpacing: 1))),
                           FilledButton(
-                              onPressed: () => ChangePassword(),
+                              onPressed: () => dialog(),
                               style: ButtonStyle(
                                 minimumSize: MaterialStateProperty.all(
                                     const Size(160, 44)), // กำหนดขนาดของปุ่ม
@@ -167,7 +182,112 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     );
   }
   
-  ChangePassword() {
-    log("changepassword");
+  dialog() {
+    if (passwordCtl.text.trim().isEmpty ||
+        passwordCtl.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'รหัสผ่านไม่ถูกต้อง',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else if (confirmpasswordCtl.text != passwordCtl.text) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            'ผิดพลาด',
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFE84C1B),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          content: const Text(
+            'รหัสผ่านไม่ตรงกัน',
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+                fontFamily: "Prompt",
+                letterSpacing: 1),
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    const Color(0xFF139D51)), // เปลี่ยนสีพื้นหลังที่นี่
+              ),
+              child: const Text('ปิด',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFFFFF),
+                      fontFamily: "Prompt",
+                      letterSpacing: 1)),
+            ),
+          ],
+        ),
+      );
+    } else {
+      save();
+    }
+  }
+
+  void save() async {
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = ChangePasswordPutReq(memberId: user.id, password: passwordCtl.text);
+    try {
+      var value = await http.put(Uri.parse('$url/member?id=${user.id}'),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: jsonEncode(data));
+      log(value.body);
+      // var member = memberRegisterPostResFromJson(value.body);
+      // log(member.affectedRow.toString());
+      // log(member.lastIdx.toString());
+    } catch (eee) {
+      log("Edit Error $eee");
+    }
+    Navigator.of(context).pop();
   }
 }
