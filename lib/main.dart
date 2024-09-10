@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Lotto App',
       theme: ThemeData(
         colorScheme: const ColorScheme.light(onPrimary: Color(0xFF024B3F)),
