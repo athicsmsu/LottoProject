@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
@@ -104,138 +107,7 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                           ],
                         ),
                       ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Text(
-                              'จำนวนตัวเลข',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontFamily: "Prompt",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        color: Colors.black, // สีของเส้น
-                        thickness: 2, // ความหนาของเส้น
-                        height: 20, // ระยะห่างระหว่าง Text กับ Divider
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Table(
-                          border: TableBorder.all(),
-                          children: <TableRow>[
-                            TableRow(
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 190, 190, 190),
-                              ),
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "ทั้งหมด",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "ขายไปแล้ว",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "ยังไม่ขาย",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TableRow(
-                              children: <Widget>[
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    height: 60,
-                                    alignment: Alignment
-                                        .center, // จัดให้อยู่กลางแนวตั้ง
-                                    child: const Text(
-                                      "xxxxxx",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: "Prompt",
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -328,7 +200,16 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                                         child: FutureBuilder(
                                           future: loadData,
                                           builder: (context, snapshot) {
-                                            if (rewardLotto.isEmpty) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                  child: Text(
+                                                      "Error: ${snapshot.error}"));
+                                            } else if (rewardLotto.isEmpty) {
                                               return Text("XXXXXX");
                                             } else {
                                               return Container(
@@ -344,12 +225,16 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                           ],
                         ),
                       ),
-                      FilledButton.icon(
-                        onPressed: () => _dialogBuilder(context),
-                        icon: Icon(Icons.refresh, color: Colors.white),
-                        label: Text("Reset"),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.red, // เปลี่ยนสีปุ่มเป็นสีแดง
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 50),
+                        child: FilledButton.icon(
+                          
+                          onPressed: () => _dialogBuilder(context),
+                          icon: Icon(Icons.refresh, color: Colors.white),
+                          label: Text("Reset"),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.red, // เปลี่ยนสีปุ่มเป็นสีแดง
+                          ),
                         ),
                       )
                     ],
@@ -484,7 +369,6 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
   }
 
   Future<void> _dialogBuilder(BuildContext context) {
-    int check = 0;
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -495,17 +379,14 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
             TextButton(
               child: const Text('ยกเลิก'),
               onPressed: () {
-                check = 0; // Set check to 0 for Disable
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text('ตกลง'),
               onPressed: () {
-                check = 1; // Set check to 1 for Enable
                 Navigator.of(context).pop();
-                // Show success dialog after closing the current dialog
-                if (check == 1) {
+                
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -514,6 +395,7 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                       actions: [
                         FilledButton(
                           onPressed: () {
+                           _resetSystem();
                             Navigator.of(context).pop();
                           },
                           child: const Text(
@@ -527,7 +409,7 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                       ],
                     ),
                   );
-                }
+                
               },
             ),
           ],
@@ -549,5 +431,35 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
       lottoList.add(numLotto.first.lotteryNumber.toString());
     }
     setState(() {});
+  }
+
+  Future<void> _resetSystem() async {
+    try {
+      log("Reset System");
+
+      var value = await Configuration.getConfig();
+      var url = value['apiEndpoint'];
+
+      var response = await http.delete(
+        Uri.parse('$url/member/reset'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode({}),
+      );
+
+      // เช็คสถานะของ response
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ (status code 200)
+        log('API call succeeded: ${response.body}');
+      } else {
+        // ถ้าเกิดข้อผิดพลาด
+        log('Failed to call API: ${response.statusCode}');
+      }
+
+      loadDataAsync();
+      setState(() {});
+    } catch (e) {
+      // จับข้อผิดพลาดและแสดง error
+      log('Error occurred: $e');
+    }
   }
 }

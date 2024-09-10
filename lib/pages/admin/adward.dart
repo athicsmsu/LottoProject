@@ -85,189 +85,172 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                     FutureBuilder(
                         future: loadData,
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Column(
-                              children: [
-                                SizedBox(height: 150),
-                                Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ],
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 150),
-                                  Text(
-                                    'เกิดข้อผิดพลาดในการโหลดข้อมูล',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 255, 255, 255),
-                                        fontFamily: "Prompt",
-                                        letterSpacing: 1),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else if (rewardLotto.isEmpty) {
-                            // ignore: prefer_const_constructors
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 150),
-                              child: const Column(
-                                children: [
-                                  SizedBox(height: 250),
-                                  Center(
-                                    child: Icon(
-                                      Icons.error,  
-                                      size: 100,
-                                      color: Colors.white
-                                    )
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    child: Center(
-                                      child: Text(
-                                        'ไม่มีรายการรางวัลที่ออก',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 255, 255, 255),
-                                            fontFamily: "Prompt",
-                                            letterSpacing: 1),
+                          
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text("Error: ${snapshot.error}"));
+                              } else if (rewardLotto.isEmpty) {
+                              // ignore: prefer_const_constructors
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 150),
+                                child: const Column(
+                                  children: [
+                                    SizedBox(height: 250),
+                                    Center(
+                                        child: Icon(Icons.error,
+                                            size: 100, color: Colors.white)),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Center(
+                                        child: Text(
+                                          'ไม่มีรายการรางวัลที่ออก',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255),
+                                              fontFamily: "Prompt",
+                                              letterSpacing: 1),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: rewardLotto
-                                  .map(
-                                    (reward) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              color: const Color(
-                                                  0xFF54B799), // สีพื้นหลังสีเขียว
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child: reward.prizeStatus != 1
-                                                ? Center(
-                                                    child: Container(
-                                                      width: 55,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                        reward.prizeStatus
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 40,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color:
-                                                              Color(0xFFFFFFFF),
-                                                          fontFamily: "Prompt",
-                                                          letterSpacing: 1,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const Icon(
-                                                    Icons
-                                                        .emoji_events, // ไอคอนของเหรียญรางวัล
-                                                    size: 55.0,
-                                                    color: Colors.white,
-                                                  ),
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: 320,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12.0,
-                                                        vertical: 8.0),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(
-                                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          3.0),
-                                                  border: Border.all(
-                                                    color: const Color(
-                                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                                    width: 10.0,
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    for (var digit in lottoList[
-                                                            reward.prizeStatus -
-                                                                1]
-                                                        .split(''))
-                                                      Text(
-                                                        digit,
-                                                        style: const TextStyle(
-                                                            fontSize: 25,
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: rewardLotto
+                                    .map(
+                                      (reward) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              decoration: BoxDecoration(
+                                                color: const Color(
+                                                    0xFF54B799), // สีพื้นหลังสีเขียว
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              child: reward.prizeStatus != 1
+                                                  ? Center(
+                                                      child: Container(
+                                                        width: 55,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                          reward.prizeStatus
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 40,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: Color(
-                                                                0xFF1E1E1E),
+                                                                0xFFFFFFFF),
                                                             fontFamily:
                                                                 "Prompt",
-                                                            letterSpacing: 1),
+                                                            letterSpacing: 1,
+                                                          ),
+                                                        ),
                                                       ),
-                                                  ],
+                                                    )
+                                                  : const Icon(
+                                                      Icons
+                                                          .emoji_events, // ไอคอนของเหรียญรางวัล
+                                                      size: 55.0,
+                                                      color: Colors.white,
+                                                    ),
+                                            ),
+                                            const SizedBox(
+                                                width:
+                                                    10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  width: 320,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 12.0,
+                                                      vertical: 8.0),
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(
+                                                        0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3.0),
+                                                    border: Border.all(
+                                                      color: const Color(
+                                                          0xFF139D51), // สีขอบของช่องหมายเลข
+                                                      width: 10.0,
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      for (var digit in lottoList[
+                                                              reward.prizeStatus -
+                                                                  1]
+                                                          .split(''))
+                                                        Text(
+                                                          digit,
+                                                          style: const TextStyle(
+                                                              fontSize: 25,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Color(
+                                                                  0xFF1E1E1E),
+                                                              fontFamily:
+                                                                  "Prompt",
+                                                              letterSpacing: 1),
+                                                        ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 15),
-                                                child: Text(
-                                                  'เงินรางวัล ${reward.prizeAmount} บาท',
-                                                  style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color.fromARGB(
-                                                          255, 255, 255, 255),
-                                                      fontFamily: "Prompt",
-                                                      letterSpacing: 1),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 15),
+                                                  child: Text(
+                                                    'เงินรางวัล ${reward.prizeAmount} บาท',
+                                                    style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255, 255, 255, 255),
+                                                        fontFamily: "Prompt",
+                                                        letterSpacing: 1),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                  .toList(),
-                            );
+                                    )
+                                    .toList(),
+                              );
                           }
                         }),
-                      
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: Row(
@@ -275,7 +258,8 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                         children: [
                           DecoratedBox(
                             decoration: BoxDecoration(
-                              color: const Color(0xFF139D51), // สีพื้นหลังของปุ่ม
+                              color:
+                                  const Color(0xFF139D51), // สีพื้นหลังของปุ่ม
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Padding(
@@ -441,151 +425,144 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
   }
 
   Future<void> _callSoldOutApi() async {
-  // เรียก API สำหรับ "ขายไปแล้ว"
-  try {
-    // แสดงข้อความเมื่อเรียก API
-    log("Calling Sold Out API");
+    // เรียก API สำหรับ "ขายไปแล้ว"
+    try {
+      // แสดงข้อความเมื่อเรียก API
+      log("Calling Sold Out API");
 
-    // ดึงค่า config จาก Configuration
-    var value = await Configuration.getConfig();
-    var url = value['apiEndpoint'];
+      // ดึงค่า config จาก Configuration
+      var value = await Configuration.getConfig();
+      var url = value['apiEndpoint'];
 
-    // ส่ง POST request ไปยัง API
-    var response = await http.post(
-      Uri.parse('$url/Ldraw/randomSold'),
-      headers: {"Content-Type": "application/json; charset=utf-8"},
-      body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
-    );
-
-    // เช็คสถานะของ response
-    if (response.statusCode == 200) {
-      // ถ้าการเรียก API สำเร็จ (status code 200)
-      log('API call succeeded: ${response.body}');
-    } else {
-      // ถ้าเกิดข้อผิดพลาด
-      log('Failed to call API: ${response.statusCode}');
-    }
-
-    loadDataAsync();
-    setState(() {
-      
-    });
-  } catch (e) {
-    // จับข้อผิดพลาดและแสดง error
-    log('Error occurred: $e');
-  }
-
-}
-
-Future<void> _callAllApi() async {
-  // เรียก API สำหรับ "ทั้งหมด"
-  try {
-    // แสดงข้อความเมื่อเรียก API
-    log("Calling All Out API");
-
-    // ดึงค่า config จาก Configuration
-    var value = await Configuration.getConfig();
-    var url = value['apiEndpoint'];
-
-    // ส่ง POST request ไปยัง API
-    var response = await http.post(
-      Uri.parse('$url/Ldraw/randomAll'),
-      headers: {"Content-Type": "application/json; charset=utf-8"},
-      body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
-    );
-
-    // เช็คสถานะของ response
-    if (response.statusCode == 200) {
-      // ถ้าการเรียก API สำเร็จ (status code 200)
-      log('API call succeeded: ${response.body}');
-    } else {
-      // ถ้าเกิดข้อผิดพลาด
-      log('Failed to call API: ${response.statusCode}');
-    }
-
-    loadDataAsync();
-    setState(() {
-      
-    });
-  } catch (e) {
-    // จับข้อผิดพลาดและแสดง error
-    log('Error occurred: $e');
-  }
-  
-}
-
-Future<void> _dialogBuilder(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Icon(Icons.warning_amber, color: Colors.red),
-        content: const Text("ต้องการสุ่มรางวัลใหม่ใช่หรือไม่"),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('ยกเลิก'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('ตกลง'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (dropdownValue == "ขายไปแล้ว") {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('สำเร็จ'),
-                    content: const Text('Random Number Sold complete'),
-                    actions: [
-                      FilledButton(
-                        onPressed: () async {
-                          await _callSoldOutApi();
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          'ปิด',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              if (dropdownValue == "ทั้งหมด") {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('สำเร็จ'),
-                    content: const Text('Random Number All complete'),
-                    actions: [
-                      FilledButton(
-                        onPressed: () async {
-                          await _callAllApi();
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          'ปิด',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              
-            },
-          ),
-        ],
+      // ส่ง POST request ไปยัง API
+      var response = await http.post(
+        Uri.parse('$url/Ldraw/randomSold'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
       );
-    },
-  );
-}
+
+      // เช็คสถานะของ response
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ (status code 200)
+        log('API call succeeded: ${response.body}');
+      } else {
+        // ถ้าเกิดข้อผิดพลาด
+        log('Failed to call API: ${response.statusCode}');
+      }
+
+      loadDataAsync();
+      setState(() {});
+    } catch (e) {
+      // จับข้อผิดพลาดและแสดง error
+      log('Error occurred: $e');
+    }
+  }
+
+  Future<void> _callAllApi() async {
+    // เรียก API สำหรับ "ทั้งหมด"
+    try {
+      // แสดงข้อความเมื่อเรียก API
+      log("Calling All Out API");
+
+      // ดึงค่า config จาก Configuration
+      var value = await Configuration.getConfig();
+      var url = value['apiEndpoint'];
+
+      // ส่ง POST request ไปยัง API
+      var response = await http.post(
+        Uri.parse('$url/Ldraw/randomAll'),
+        headers: {"Content-Type": "application/json; charset=utf-8"},
+        body: jsonEncode({}), // ส่งข้อมูลที่จำเป็นไปยัง API ถ้ามี
+      );
+
+      // เช็คสถานะของ response
+      if (response.statusCode == 200) {
+        // ถ้าการเรียก API สำเร็จ (status code 200)
+        log('API call succeeded: ${response.body}');
+      } else {
+        // ถ้าเกิดข้อผิดพลาด
+        log('Failed to call API: ${response.statusCode}');
+      }
+
+      loadDataAsync();
+      setState(() {});
+    } catch (e) {
+      // จับข้อผิดพลาดและแสดง error
+      log('Error occurred: $e');
+    }
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Icon(Icons.warning_amber, color: Colors.red),
+          content: const Text("ต้องการสุ่มรางวัลใหม่ใช่หรือไม่"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('ยกเลิก'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('ตกลง'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (dropdownValue == "ขายไปแล้ว") {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('สำเร็จ'),
+                      content: const Text('Random Number Sold complete'),
+                      actions: [
+                        FilledButton(
+                          onPressed: () async {
+                            await _callSoldOutApi();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'ปิด',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                if (dropdownValue == "ทั้งหมด") {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('สำเร็จ'),
+                      content: const Text('Random Number All complete'),
+                      actions: [
+                        FilledButton(
+                          onPressed: () async {
+                            await _callAllApi();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'ปิด',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> loadDataAsync() async {
     var value = await Configuration.getConfig();
