@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
+import 'package:lotto_application/models/Res/RewardLottoGetRes.dart';
 import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/admin/profile.dart';
+import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/admin/setting.dart';
 
 const List<String> list = <String>['ทั้งหมด', 'ขายไปแล้ว'];
@@ -14,6 +18,17 @@ class AdwardAdminPage extends StatefulWidget {
 
 class _AdwardAdminPageState extends State<AdwardAdminPage> {
   String dropdownValue = list.first;
+  late Future<void> loadData;
+  List<RewardLottoGetRes> rewardLotto = [];
+  List<String> lottoList = [];
+  String url = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData = loadDataAsync();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -63,443 +78,234 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
             children: [
               SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color:
-                                  const Color(0xFF54B799), // สีพื้นหลังสีเขียว
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Icon(
-                              Icons.emoji_events, // ไอคอนของเหรียญรางวัล
-                              size: 55.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                  borderRadius: BorderRadius.circular(3.0),
-                                  border: Border.all(
-                                    color: const Color(
-                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                    width: 10.0,
+                    FutureBuilder(
+                        future: loadData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Column(
+                              children: [
+                                SizedBox(height: 150),
+                                Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 150),
+                                  Text(
+                                    'เกิดข้อผิดพลาดในการโหลดข้อมูล',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 255, 255, 255),
+                                        fontFamily: "Prompt",
+                                        letterSpacing: 1),
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    for (var digit in "167892".split(''))
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E1E1E),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
+                                ],
+                              ),
+                            );
+                          } else if (rewardLotto.isEmpty) {
+                            // ignore: prefer_const_constructors
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 150),
+                              child: const Column(
+                                children: [
+                                  SizedBox(height: 250),
+                                  Center(
+                                    child: Icon(
+                                      Icons.error,  
+                                      size: 100,
+                                      color: Colors.white
+                                    )
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Center(
+                                      child: Text(
+                                        'ไม่มีรายการรางวัลที่ออก',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(255, 255, 255, 255),
+                                            fontFamily: "Prompt",
+                                            letterSpacing: 1),
                                       ),
-                                  ],
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  'เงินรางวัล 5,000 บาท',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1E1E1E),
-                                      fontFamily: "Prompt",
-                                      letterSpacing: 1),
-                                ),
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: rewardLotto
+                                  .map(
+                                    (reward) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              color: const Color(
+                                                  0xFF54B799), // สีพื้นหลังสีเขียว
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            child: reward.prizeStatus != 1
+                                                ? Center(
+                                                    child: Container(
+                                                      width: 55,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        reward.prizeStatus
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 40,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Color(0xFFFFFFFF),
+                                                          fontFamily: "Prompt",
+                                                          letterSpacing: 1,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : const Icon(
+                                                    Icons
+                                                        .emoji_events, // ไอคอนของเหรียญรางวัล
+                                                    size: 55.0,
+                                                    color: Colors.white,
+                                                  ),
+                                          ),
+                                          const SizedBox(
+                                              width:
+                                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 320,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12.0,
+                                                        vertical: 8.0),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(
+                                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          3.0),
+                                                  border: Border.all(
+                                                    color: const Color(
+                                                        0xFF139D51), // สีขอบของช่องหมายเลข
+                                                    width: 10.0,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    for (var digit in lottoList[
+                                                            reward.prizeStatus -
+                                                                1]
+                                                        .split(''))
+                                                      Text(
+                                                        digit,
+                                                        style: const TextStyle(
+                                                            fontSize: 25,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Color(
+                                                                0xFF1E1E1E),
+                                                            fontFamily:
+                                                                "Prompt",
+                                                            letterSpacing: 1),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 15),
+                                                child: Text(
+                                                  'เงินรางวัล ${reward.prizeAmount} บาท',
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color.fromARGB(
+                                                          255, 255, 255, 255),
+                                                      fontFamily: "Prompt",
+                                                      letterSpacing: 1),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          }
+                        }),
+                      
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF139D51), // สีพื้นหลังของปุ่ม
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 2.5),
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.white),
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.white),
+                                dropdownColor: const Color(0xFF54B799),
+                                underline: Container(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                items: list.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
                               ),
-                            ],
+                            ),
                           ),
+                          FilledButton(
+                              onPressed: () => _dialogBuilder(context),
+                              child: const Text("ออกผลรางวัล"))
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 70,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color:
-                                  const Color(0xFF54B799), // สีพื้นหลังสีเขียว
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '2',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: "Prompt",
-                                    letterSpacing: 1),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                  borderRadius: BorderRadius.circular(3.0),
-                                  border: Border.all(
-                                    color: const Color(
-                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                    width: 10.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    for (var digit in "167892".split(''))
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E1E1E),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  'เงินรางวัล 4,000 บาท',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1E1E1E),
-                                      fontFamily: "Prompt",
-                                      letterSpacing: 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 70,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color:
-                                  const Color(0xFF54B799), // สีพื้นหลังสีเขียว
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '3',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: "Prompt",
-                                    letterSpacing: 1),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                  borderRadius: BorderRadius.circular(3.0),
-                                  border: Border.all(
-                                    color: const Color(
-                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                    width: 10.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    for (var digit in "167892".split(''))
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E1E1E),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  'เงินรางวัล 3,000 บาท',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1E1E1E),
-                                      fontFamily: "Prompt",
-                                      letterSpacing: 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 70,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color:
-                                  const Color(0xFF54B799), // สีพื้นหลังสีเขียว
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '4',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: "Prompt",
-                                    letterSpacing: 1),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                  borderRadius: BorderRadius.circular(3.0),
-                                  border: Border.all(
-                                    color: const Color(
-                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                    width: 10.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    for (var digit in "167892".split(''))
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E1E1E),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  'เงินรางวัล 2,000 บาท',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1E1E1E),
-                                      fontFamily: "Prompt",
-                                      letterSpacing: 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 70,
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color:
-                                  const Color(0xFF54B799), // สีพื้นหลังสีเขียว
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                '5',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: "Prompt",
-                                    letterSpacing: 1),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0, vertical: 8.0),
-                                decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                  borderRadius: BorderRadius.circular(3.0),
-                                  border: Border.all(
-                                    color: const Color(
-                                        0xFF139D51), // สีขอบของช่องหมายเลข
-                                    width: 10.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    for (var digit in "167892".split(''))
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15.0),
-                                        child: Text(
-                                          digit,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF1E1E1E),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 15),
-                                child: Text(
-                                  'เงินรางวัล 1,000 บาท',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1E1E1E),
-                                      fontFamily: "Prompt",
-                                      letterSpacing: 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Color(0xFF139D51), // สีพื้นหลังของปุ่ม
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_drop_down,
-                                  color: Colors.white),
-                              elevation: 16,
-                              style: const TextStyle(color: Colors.white),
-                              dropdownColor: Color(0xFF54B799),
-                              underline: Container(),
-                              onChanged: (String? value) {
-                                setState(() {
-                                  dropdownValue = value!;
-                                });
-                              },
-                              items: list
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      FilledButton(onPressed:  ()=> _dialogBuilder(context), 
-                      child: Text("ออกผลรางวัล"))
-                      ],
                     )
                   ],
                 ),
@@ -631,13 +437,13 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
     );
   }
 
-    Future<void> _dialogBuilder(BuildContext context) {
+  Future<void> _dialogBuilder(BuildContext context) {
     int check = 0;
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Icon(Icons.warning_amber, color: Colors.red),
+          title: const Icon(Icons.warning_amber, color: Colors.red),
           content: const Text("ต้องการสุ่มรางวัลใหม่ใช่หรือไม่"),
           actions: <Widget>[
             TextButton(
@@ -683,5 +489,19 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
       },
     );
   }
-}
 
+  Future<void> loadDataAsync() async {
+    var value = await Configuration.getConfig();
+    url = value['apiEndpoint'];
+    var data = await http.get(Uri.parse('$url/Ldraw/all'));
+    rewardLotto = rewardLottoGetResFromJson(data.body);
+
+    for (var i = 0; i < rewardLotto.length; i++) {
+      var lotto = await http
+          .get(Uri.parse('$url/lottery?id=${rewardLotto[i].lotteryId}'));
+      List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
+      lottoList.add(numLotto.first.lotteryNumber.toString());
+    }
+    setState(() {});
+  }
+}
