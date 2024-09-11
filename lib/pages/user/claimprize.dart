@@ -346,7 +346,11 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
                                                                         3.0),
                                                           ),
                                                           child: Text(
-                                                            numLottoList[myLottoWinList.indexOf(wonlotto)].lotteryNumber.toString()   , // Display the lottery number
+                                                            numLottoList[myLottoWinList
+                                                                    .indexOf(
+                                                                        wonlotto)]
+                                                                .lotteryNumber
+                                                                .toString(), // Display the lottery number
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 30,
@@ -495,21 +499,18 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
       url = value['apiEndpoint'];
       var data = await http
           .get(Uri.parse('$url/Ldraw/checkPrize?member_id=${user.id}'));
-      log(data.body);
       if (data.body == 'No lottery draw found for the given lottery_ids' ||
           data.body == 'No lottery found for this member') {
         myLottoWinList = [];
-        setState(() {
-        });
+        setState(() {});
         return;
       } else {
         numLottoList = [];
         myLottoWinList = myLottoWinGetResFromJson(data.body);
         for (var i = 0; i < myLottoWinList.length; i++) {
-          log(myLottoWinList[i].lotteryId.toString());
           var lotto = await http
               .get(Uri.parse('$url/lottery?id=${myLottoWinList[i].lotteryId}'));
-          List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);     
+          List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);
           numLottoList.add(numLotto.first);
         }
         setState(() {
@@ -527,7 +528,7 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
       var value = await http.put(Uri.parse('$url/member/claimPrize'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
           body: jsonEncode(data));
-          log(value.body);
+      log(value.body);
       showDialog(
         context: context,
         barrierDismissible: false,
