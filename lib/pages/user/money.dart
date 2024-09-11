@@ -25,6 +25,7 @@ class _MoneyPageState extends State<MoneyPage> {
   TextEditingController moneyCtl = TextEditingController();
   bool isApplePaySelected = true;
   bool isPayPalSelected = false;
+  String status = 'canAdd';
 
   @override
   void initState() {
@@ -431,7 +432,11 @@ class _MoneyPageState extends State<MoneyPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      dialog(1);
+                      if (status == 'canAdd') {
+                        dialog(1);
+                      } else {
+                        log('can not add this time');
+                      }
                     },
                     child: Row(
                       children: [
@@ -556,11 +561,12 @@ class _MoneyPageState extends State<MoneyPage> {
         ),
       );
     } else if (check == 0) {
+      status = 'canAdd';
       Navigator.of(context).pop();
-    } else if(check == 1){
+    } else if (check == 1) {
+      status = 'Add';
       addMoney();
-    }
-    else if (check == 2) {
+    } else if (check == 2) {
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -586,8 +592,8 @@ class _MoneyPageState extends State<MoneyPage> {
           actions: [
             FilledButton(
               onPressed: () {
-                  Navigator.of(context).pop();
-                  dialog(0);
+                Navigator.of(context).pop();
+                dialog(0);
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
@@ -629,18 +635,6 @@ class _MoneyPageState extends State<MoneyPage> {
           actions: [
             FilledButton(
               onPressed: () {
-                 _updateText(moneyCtl.text);
-                if (phoneCtl.text.length > 3 && phoneCtl.text.length <= 6) {
-                  phoneCtl.text = phoneCtl.text.substring(0, 3) +
-                      '-' +
-                      phoneCtl.text.substring(3);
-                } else if (phoneCtl.text.length > 6) {
-                  phoneCtl.text = phoneCtl.text.substring(0, 3) +
-                      '-' +
-                      phoneCtl.text.substring(3, 6) +
-                      '-' +
-                      phoneCtl.text.substring(6, phoneCtl.text.length);
-                }
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
@@ -658,6 +652,17 @@ class _MoneyPageState extends State<MoneyPage> {
           ],
         ),
       );
+      _updateText(moneyCtl.text);
+      if (phoneCtl.text.length > 3 && phoneCtl.text.length <= 6) {
+        phoneCtl.text =
+            phoneCtl.text.substring(0, 3) + '-' + phoneCtl.text.substring(3);
+      } else if (phoneCtl.text.length > 6) {
+        phoneCtl.text = phoneCtl.text.substring(0, 3) +
+            '-' +
+            phoneCtl.text.substring(3, 6) +
+            '-' +
+            phoneCtl.text.substring(6, phoneCtl.text.length);
+      }
     }
   }
 
@@ -671,20 +676,17 @@ class _MoneyPageState extends State<MoneyPage> {
     var data = await http.put(Uri.parse('$url/member/deposit'),
         headers: {"Content-Type": "application/json; charset=utf-8"},
         body: jsonEncode(addMoneyPutReq));
-    log(data.body);
-
-     // แปลง data.body จาก JSON string ไปเป็น JSON object
+    // แปลง data.body จาก JSON string ไปเป็น JSON object
     var responseBody = jsonDecode(data.body);
     log(responseBody['message']);
-    if(responseBody['message'] == 'Funds added successfully'){
+    if (responseBody['message'] == 'Funds added successfully') {
       dialog(2);
-      if(phoneCtl.text == user.phone){
+      if (phoneCtl.text == user.phone) {
         user.wallet_balance = user.wallet_balance + int.parse(moneyCtl.text);
         storage.write('walletBalance', user.wallet_balance);
-      } else {
-        
-      }
+      } else {}
     } else {
+      status = 'canAdd';
       dialog(3);
     }
   }

@@ -489,7 +489,7 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
   }
 
   Future<void> loadDataAsync() async {
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 2));
     try {
       var value = await Configuration.getConfig();
       url = value['apiEndpoint'];
@@ -511,10 +511,10 @@ class _ClaimPrizePageState extends State<ClaimPrizePage> {
               .get(Uri.parse('$url/lottery?id=${myLottoWinList[i].lotteryId}'));
           List<LottoAllGetRes> numLotto = lottoAllGetResFromJson(lotto.body);     
           numLottoList.add(numLotto.first);
-          setState(() {
-            status = 'canClaim';
-          });
         }
+        setState(() {
+          status = 'canClaim';
+        });
       }
     } catch (e) {
       log(e.toString());
