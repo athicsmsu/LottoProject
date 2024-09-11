@@ -167,6 +167,8 @@ class _LottoPageState extends State<LottoPage> {
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
+                                  color: Color(0xFF000000),
+                                  fontFamily: "Prompt",
                                   letterSpacing:
                                       24.0, // ระยะห่างระหว่างตัวเลขแต่ละตัว
                                 ),
@@ -306,7 +308,7 @@ class _LottoPageState extends State<LottoPage> {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Center(
                                 child: Text(
-                                  'ไม่มีรายการเลขในระบบ',
+                                  'ไม่มีเลขรายการในระบบ',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
