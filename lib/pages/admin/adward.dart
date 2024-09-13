@@ -332,7 +332,7 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                           }
                         }),
                     Padding(
-                      padding: const EdgeInsets.only(top: 30),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 80),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
