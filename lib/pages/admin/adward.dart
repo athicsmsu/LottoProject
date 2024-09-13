@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
 import 'package:lotto_application/models/Res/RewardLottoGetRes.dart';
@@ -9,6 +10,7 @@ import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/admin/profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/admin/setting.dart';
+import 'package:lotto_application/pages/login.dart';
 
 List<String> list = <String>['ทั้งหมด', 'ขายไปแล้ว'];
 
@@ -71,8 +73,13 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                   size: 38.0,
                 ), // ปุ่มที่อยู่ขวามือ
                 onPressed: () {
-                  // ฟังก์ชันเมื่อกดปุ่ม settings
-                  print('Settings button pressed');
+                  GetStorage storage = GetStorage();
+                  storage.erase();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ));
                 },
               ),
             ],
@@ -451,7 +458,6 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
       }
 
       loadDataAsync();
-      setState(() {});
     } catch (e) {
       // จับข้อผิดพลาดและแสดง error
       log('Error occurred: $e');
@@ -483,9 +489,7 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
         // ถ้าเกิดข้อผิดพลาด
         log('Failed to call API: ${response.statusCode}');
       }
-
       loadDataAsync();
-      setState(() {});
     } catch (e) {
       // จับข้อผิดพลาดและแสดง error
       log('Error occurred: $e');
@@ -512,6 +516,7 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                 Navigator.of(context).pop();
                 if (dropdownValue == "ขายไปแล้ว") {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('สำเร็จ'),
@@ -535,6 +540,7 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                 }
                 if (dropdownValue == "ทั้งหมด") {
                   showDialog(
+                    barrierDismissible: false,
                     context: context,
                     builder: (context) => AlertDialog(
                       title: const Text('สำเร็จ'),

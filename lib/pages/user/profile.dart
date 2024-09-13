@@ -84,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 GetStorage storage = GetStorage();
                 storage.erase();
+                context.read<Appdata>().page = '';
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -127,28 +128,28 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              width: 40, // กำหนดความกว้างของวงกลมเล็ก
-                              height: 40, // กำหนดความสูงของวงกลมเล็ก
-                              decoration: BoxDecoration(
-                                color:
-                                    Color(0xFF54B799), // สีพื้นหลังของวงกลมเล็ก
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white, // สีของกรอบวงกลมเล็ก
-                                  width: 2.5, // ความหนาของกรอบวงกลมเล็ก
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.edit, // ไอคอนที่จะแสดงในวงกลมเล็ก
-                                color: Colors.white, // สีของไอคอน
-                                size: 30, // ขนาดของไอคอน
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   bottom: 0,
+                          //   right: 0,
+                          //   child: Container(
+                          //     width: 40, // กำหนดความกว้างของวงกลมเล็ก
+                          //     height: 40, // กำหนดความสูงของวงกลมเล็ก
+                          //     decoration: BoxDecoration(
+                          //       color:
+                          //           Color(0xFF54B799), // สีพื้นหลังของวงกลมเล็ก
+                          //       shape: BoxShape.circle,
+                          //       border: Border.all(
+                          //         color: Colors.white, // สีของกรอบวงกลมเล็ก
+                          //         width: 2.5, // ความหนาของกรอบวงกลมเล็ก
+                          //       ),
+                          //     ),
+                          //     child: const Icon(
+                          //       Icons.edit, // ไอคอนที่จะแสดงในวงกลมเล็ก
+                          //       color: Colors.white, // สีของไอคอน
+                          //       size: 30, // ขนาดของไอคอน
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

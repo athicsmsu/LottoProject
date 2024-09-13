@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Res/LottoAllGetRes.dart';
 import 'package:lotto_application/models/Res/RewardLottoGetRes.dart';
@@ -9,6 +10,7 @@ import 'package:lotto_application/pages/admin/adward.dart';
 import 'package:lotto_application/pages/admin/main.dart';
 import 'package:lotto_application/pages/admin/profile.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_application/pages/login.dart';
 
 class SettingAdminPage extends StatefulWidget {
   const SettingAdminPage({super.key});
@@ -69,8 +71,13 @@ class _SettingAdminPageState extends State<SettingAdminPage> {
                   size: 38.0,
                 ), // ปุ่มที่อยู่ขวามือ
                 onPressed: () {
-                  // ฟังก์ชันเมื่อกดปุ่ม settings
-                  print('Settings button pressed');
+                  GetStorage storage = GetStorage();
+                  storage.erase();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ));
                 },
               ),
             ],

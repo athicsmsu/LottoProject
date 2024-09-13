@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/models/Req/ChangePasswordPutReq.dart';
+import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -288,6 +289,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     } catch (eee) {
       log("Edit Error $eee");
     }
-    Navigator.of(context).pop();
+    var page = context.read<Appdata>().page;
+    if(page == 'ProfilePage'){
+      Navigator.of(context).pop();
+    } else {
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ));
+    }
   }
 }

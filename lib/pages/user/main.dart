@@ -518,5 +518,8 @@ class _MainUserPageState extends State<MainUserPage> {
     url = value['apiEndpoint'];
     var data = await http.get(Uri.parse('$url/lottery/allnotClaim?id=${user.id}'));
     purchaseList = lottoAllGetResFromJson(data.body);
+    if (purchaseList.length > 4) {
+      purchaseList = purchaseList.sublist(0, 4);
+    }
   }
 }

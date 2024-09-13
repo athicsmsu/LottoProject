@@ -896,8 +896,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             actions: [
                               FilledButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
                                   register();
+                                  Navigator.of(context).pop();
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(

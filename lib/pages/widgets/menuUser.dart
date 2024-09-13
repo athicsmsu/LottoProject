@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:lotto_application/config/config.dart';
+import 'package:lotto_application/models/Res/MyLottoWinGetRes.dart';
 import 'package:lotto_application/pages/user/claimprize.dart';
 import 'package:lotto_application/pages/user/profile.dart';
 import 'package:lotto_application/pages/user/reward.dart';
@@ -6,6 +10,7 @@ import 'package:lotto_application/pages/user/lotto.dart';
 import 'package:lotto_application/pages/user/main.dart';
 import 'package:lotto_application/shared/app_data.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class MenuUser extends StatefulWidget {
   const MenuUser({super.key});
@@ -22,12 +27,16 @@ class _MenuUserState extends State<MenuUser> {
   int colorLotto = 0xFF777777;
   int colorLotto2 = 0xFF666666;
   var page = '';
+  late Future<void> loadData;
+  String url = '';
+  late MemberProfile user;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     page = context.read<Appdata>().page;
+    user = context.read<Appdata>().user;
     if (page == 'mainUser') {
       colorMain = 0xFF54B799;
     } else if (page == 'RewardPage') {
@@ -41,6 +50,7 @@ class _MenuUserState extends State<MenuUser> {
       colorLotto2 = 0xFF125B4D;
     }
     // log(page);
+    loadData = loadDataAsync();
   }
 
   @override
@@ -141,22 +151,61 @@ class _MenuUserState extends State<MenuUser> {
                       );
                     }
                   },
-                  child: Column(
+                  child: Stack(
+                    clipBehavior: Clip
+                        .none, // Allow the notification to overflow the icon
                     children: [
-                      Icon(
-                        Icons.attach_money,
-                        size: 40,
-                        color: Color(colorLottoWin),
-                      ),
-                      Text(
-                        'ขึ้นเงิน',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.attach_money,
+                            size: 40,
                             color: Color(colorLottoWin),
-                            fontFamily: "Prompt",
-                            letterSpacing: 1),
+                          ),
+                          Text(
+                            'ขึ้นเงิน',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(colorLottoWin),
+                                fontFamily: "Prompt",
+                                letterSpacing: 1),
+                          ),
+                        ],
                       ),
+                      if (context.read<Appdata>().notificationCount > 0)
+                        Positioned(
+                          right:
+                              -5, // Adjust this based on the positioning you need
+                          top:
+                              -10, // Adjust this to place the badge above the icon
+                          child: Container(
+                            padding: const EdgeInsets.all(
+                                2), // Padding inside the badge
+                            decoration: BoxDecoration(
+                              color:
+                                  Colors.red, // Background color of the badge
+                              borderRadius:
+                                  BorderRadius.circular(12), // Circular badge
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 24, // Minimum width for the badge
+                              minHeight: 24, // Minimum height for the badge
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${context.read<Appdata>().notificationCount}', // The number to display in the badge
+                                style: const TextStyle(
+                                  color: Colors
+                                      .white, // Text color inside the badge
+                                  fontSize: 12, // Text size
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -233,5 +282,27 @@ class _MenuUserState extends State<MenuUser> {
       ),
     );
     return align;
+  }
+
+  Future<void> loadDataAsync() async {
+    // await Future.delayed(const Duration(seconds: 2));
+    try {
+      var value = await Configuration.getConfig();
+      url = value['apiEndpoint'];
+      var data = await http
+          .get(Uri.parse('$url/Ldraw/checkPrize?member_id=${user.id}'));
+      if (data.body == 'No lottery draw found for the given lottery_ids' ||
+          data.body == 'No lottery found for this member') {
+        context.read<Appdata>().notificationCount = 0;
+        setState(() {});
+        return;
+      } else {
+        context.read<Appdata>().notificationCount =
+            myLottoWinGetResFromJson(data.body).length;
+        setState(() {});
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
