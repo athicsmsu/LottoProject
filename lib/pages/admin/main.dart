@@ -78,7 +78,7 @@ class _MainAdminPageState extends State<MainAdminPage> {
                       borderRadius:
                           BorderRadius.circular(16.0), // ทำให้มุมโค้งมน
                     ),
-                    title: const Text('ต้องการออกจากระบบหรือไม่?',
+                    title: const Text('ออกจากระบบหรือไม่?',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 24,
