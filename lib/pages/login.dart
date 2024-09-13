@@ -199,42 +199,45 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 42, vertical: 42),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            register();
-                          },
-                          child: const Text('สมัครสมาชิก',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF54B799),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1))),
-                      FilledButton(
-                          onPressed: () => login(),
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                                const Size(160, 44)), // กำหนดขนาดของปุ่ม
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(25.0), // ทำให้ขอบมน
-                            )),
-                          ),
-                          child: const Text('เข้าสู่ระบบ',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFFFFFFF),
-                                  fontFamily: "Prompt",
-                                  letterSpacing: 1))),
-                    ],
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 42),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              register();
+                            },
+                            child: const Text('สมัครสมาชิก',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF54B799),
+                                    fontFamily: "Prompt",
+                                    letterSpacing: 1))),
+                        FilledButton(
+                            onPressed: () => login(),
+                            style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(
+                                  const Size(160, 44)), // กำหนดขนาดของปุ่ม
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFF139D51)), // สีพื้นหลังของปุ่ม
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(25.0), // ทำให้ขอบมน
+                              )),
+                            ),
+                            child: const Text('เข้าสู่ระบบ',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: "Prompt",
+                                    letterSpacing: 1))),
+                      ],
+                    ),
                   ),
                 ),
                 TextButton(

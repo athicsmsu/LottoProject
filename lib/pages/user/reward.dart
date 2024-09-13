@@ -245,111 +245,114 @@ class _RewardPageState extends State<RewardPage> {
                         ],
                       );
                     } else {
-                      return Column(
-                        children: rewardLotto
-                            .map(
-                              (reward) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: const Color(
-                                            0xFF54B799), // สีพื้นหลังสีเขียว
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: reward.prizeStatus != 1
-                                          ? Center(
-                                              child: Container(
-                                                width: 55,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  reward.prizeStatus.toString(),
-                                                  style: const TextStyle(
-                                                    fontSize: 40,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xFFFFFFFF),
-                                                    fontFamily: "Prompt",
-                                                    letterSpacing: 1,
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          children: rewardLotto
+                              .map(
+                                (reward) => Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        decoration: BoxDecoration(
+                                          color: const Color(
+                                              0xFF54B799), // สีพื้นหลังสีเขียว
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        child: reward.prizeStatus != 1
+                                            ? Center(
+                                                child: Container(
+                                                  width: 55,
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    reward.prizeStatus.toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 40,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFFFFFFFF),
+                                                      fontFamily: "Prompt",
+                                                      letterSpacing: 1,
+                                                    ),
                                                   ),
                                                 ),
+                                              )
+                                            : const Icon(
+                                                Icons
+                                                    .emoji_events, // ไอคอนของเหรียญรางวัล
+                                                size: 55.0,
+                                                color: Colors.white,
                                               ),
-                                            )
-                                          : const Icon(
-                                              Icons
-                                                  .emoji_events, // ไอคอนของเหรียญรางวัล
-                                              size: 55.0,
-                                              color: Colors.white,
-                                            ),
-                                    ),
-                                    const SizedBox(
-                                        width:
-                                            10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
+                                      ),
+                                      const SizedBox(
                                           width:
-                                              300, // กำหนดความกว้างของกรอบทั้งหมดให้เท่ากัน
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12.0, vertical: 8.0),
-                                          decoration: BoxDecoration(
-                                            color: const Color(
-                                                0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
-                                            borderRadius:
-                                                BorderRadius.circular(3.0),
-                                            border: Border.all(
+                                              10.0), // ระยะห่างระหว่างไอคอนกับหมายเลขรางวัล
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width:
+                                                280, // กำหนดความกว้างของกรอบทั้งหมดให้เท่ากัน
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12.0, vertical: 8.0),
+                                            decoration: BoxDecoration(
                                               color: const Color(
-                                                  0xFF139D51), // สีขอบของช่องหมายเลข
-                                              width: 10.0,
+                                                  0xFFD9D9D9), // สีพื้นหลังของช่องหมายเลข
+                                              borderRadius:
+                                                  BorderRadius.circular(3.0),
+                                              border: Border.all(
+                                                color: const Color(
+                                                    0xFF139D51), // สีขอบของช่องหมายเลข
+                                                width: 10.0,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceEvenly, // กระจายตัวเลขให้มีช่องว่างเท่ากัน
+                                              children: [
+                                                for (var digit in lottoList[
+                                                        reward.prizeStatus - 1]
+                                                    .split(''))
+                                                  Text(
+                                                    digit,
+                                                    style: const TextStyle(
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color(0xFF1E1E1E),
+                                                        fontFamily: "Prompt",
+                                                        letterSpacing: 1),
+                                                  ),
+                                              ],
                                             ),
                                           ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .spaceEvenly, // กระจายตัวเลขให้มีช่องว่างเท่ากัน
-                                            children: [
-                                              for (var digit in lottoList[
-                                                      reward.prizeStatus - 1]
-                                                  .split(''))
-                                                Text(
-                                                  digit,
-                                                  style: const TextStyle(
-                                                      fontSize: 25,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Color(0xFF1E1E1E),
-                                                      fontFamily: "Prompt",
-                                                      letterSpacing: 1),
-                                                ),
-                                            ],
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(bottom: 15),
+                                            child: Text(
+                                              'เงินรางวัล ${reward.prizeAmount} บาท',
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF1E1E1E),
+                                                  fontFamily: "Prompt",
+                                                  letterSpacing: 1),
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 15),
-                                          child: Text(
-                                            'เงินรางวัล ${reward.prizeAmount} บาท',
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF1E1E1E),
-                                                fontFamily: "Prompt",
-                                                letterSpacing: 1),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
+                              )
+                              .toList(),
+                        ),
                       );
                     }
                   },

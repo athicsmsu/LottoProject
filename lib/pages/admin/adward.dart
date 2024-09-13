@@ -165,45 +165,45 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                     FutureBuilder(
                         future: loadData,
                         builder: (context, snapshot) {
-                          
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                    child: Text("Error: ${snapshot.error}"));
-                              } else if (rewardLotto.isEmpty) {
-                              // ignore: prefer_const_constructors
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 150),
-                                child: const Column(
-                                  children: [
-                                    SizedBox(height: 250),
-                                    Center(
-                                        child: Icon(Icons.error,
-                                            size: 100, color: Colors.white)),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Center(
-                                        child: Text(
-                                          'ไม่มีรายการรางวัลที่ออก',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255),
-                                              fontFamily: "Prompt",
-                                              letterSpacing: 1),
-                                        ),
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text("Error: ${snapshot.error}"));
+                          } else if (rewardLotto.isEmpty) {
+                            // ignore: prefer_const_constructors
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 150),
+                              child: const Column(
+                                children: [
+                                  SizedBox(height: 250),
+                                  Center(
+                                      child: Icon(Icons.error,
+                                          size: 100, color: Colors.white)),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Center(
+                                      child: Text(
+                                        'ไม่มีรายการรางวัลที่ออก',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
+                                            fontFamily: "Prompt",
+                                            letterSpacing: 1),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Column(
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: rewardLotto
                                     .map(
@@ -328,7 +328,8 @@ class _AdwardAdminPageState extends State<AdwardAdminPage> {
                                       ),
                                     )
                                     .toList(),
-                              );
+                              ),
+                            );
                           }
                         }),
                     Padding(
