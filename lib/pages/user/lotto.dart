@@ -478,7 +478,7 @@ class _LottoPageState extends State<LottoPage> {
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: Colors.black,
-                                                            letterSpacing: 10.0,
+                                                            letterSpacing: 5.0,
                                                           ),
                                                         ),
                                                       ),
