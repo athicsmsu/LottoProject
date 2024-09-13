@@ -98,13 +98,92 @@ class _LottoPageState extends State<LottoPage> {
                           size: 40,
                         ),
                         onPressed: () {
-                          GetStorage storage = GetStorage();
-                          storage.erase();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                              ));
+                         showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    16.0), // ทำให้มุมโค้งมน
+                              ),
+                              title: const Text('ต้องการออกจากระบบหรือไม่?',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF000000),
+                                      fontFamily: "Prompt",
+                                      letterSpacing: 1)),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFFE84C1B),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'ยกเลิก',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFFFFFFFF),
+                                              fontFamily: "Prompt",
+                                              letterSpacing: 1),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFF33CA7A),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'ตกลง',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFFFFFFFF),
+                                              fontFamily: "Prompt",
+                                              letterSpacing: 1),
+                                        ),
+                                        onPressed: () {
+                                          GetStorage storage = GetStorage();
+                                          storage.erase();
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const LoginPage(),
+                                              ));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ],
@@ -478,7 +557,7 @@ class _LottoPageState extends State<LottoPage> {
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: Colors.black,
-                                                            letterSpacing: 5.0,
+                                                            letterSpacing: 2.5,
                                                           ),
                                                         ),
                                                       ),
