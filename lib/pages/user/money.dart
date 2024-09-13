@@ -668,6 +668,7 @@ class _MoneyPageState extends State<MoneyPage> {
 
   void addMoney() async {
     moneyCtl.text = moneyCtl.text.replaceAll(' บาท', '');
+    moneyCtl.text = moneyCtl.text.replaceAll(',', '');
     phoneCtl.text = phoneCtl.text.replaceAll('-', '');
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
