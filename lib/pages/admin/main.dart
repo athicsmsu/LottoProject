@@ -8,7 +8,6 @@ import 'package:lotto_application/pages/admin/setting.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/shared/app_data.dart';
-import 'package:provider/provider.dart';
 
 class MainAdminPage extends StatefulWidget {
   const MainAdminPage({super.key});
@@ -28,7 +27,6 @@ class _MainAdminPageState extends State<MainAdminPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    user = context.read<Appdata>().user;
     loadData = loadDataAsync();
   }
 
