@@ -82,14 +82,87 @@ class _ProfilePageState extends State<ProfilePage> {
                 size: 40,
               ), // ปุ่มที่อยู่ขวามือ
               onPressed: () {
-                GetStorage storage = GetStorage();
-                storage.erase();
-                context.read<Appdata>().page = '';
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginPage(),
-                    ));
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(16.0), // ทำให้มุมโค้งมน
+                    ),
+                    title: const Text('ต้องการออกจากระบบหรือไม่?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF000000),
+                            fontFamily: "Prompt",
+                            letterSpacing: 1)),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xFFE84C1B),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'ยกเลิก',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: "Prompt",
+                                    letterSpacing: 1),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color(0xFF33CA7A),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'ตกลง',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: "Prompt",
+                                    letterSpacing: 1),
+                              ),
+                              onPressed: () {
+                                GetStorage storage = GetStorage();
+                                storage.erase();
+                                context.read<Appdata>().page = '';
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginPage(),
+                                    ));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               },
             ),
           ],
@@ -313,10 +386,16 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void save() async{
+  void save() async {
     var value = await Configuration.getConfig();
     url = value['apiEndpoint'];
-    var data = MemberEditPutReq(memberId: user.id, name: nameCtl.text, phone: phoneCtl.text, image: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', email: emailCtl.text);
+    var data = MemberEditPutReq(
+        memberId: user.id,
+        name: nameCtl.text,
+        phone: phoneCtl.text,
+        image:
+            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        email: emailCtl.text);
     try {
       var value = await http.put(Uri.parse('$url/member?id=${user.id}'),
           headers: {"Content-Type": "application/json; charset=utf-8"},
@@ -324,7 +403,8 @@ class _ProfilePageState extends State<ProfilePage> {
       log(value.body);
       user.fullname = nameCtl.text;
       user.phone = phoneCtl.text;
-      user.image = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+      user.image =
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
       user.email = emailCtl.text;
       context.read<Appdata>().user = user;
       storage.write('name', user.fullname);
@@ -340,7 +420,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (nameCtl.text.isEmpty ||
         emailCtl.text.isEmpty ||
         phoneCtl.text.isEmpty) {
-          showDialog(
+      showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text(

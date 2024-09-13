@@ -359,7 +359,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: Colors.black,
-                                                          letterSpacing: 10.0,
+                                                          letterSpacing: 2.5,
                                                         ),
                                                       ),
                                                     ),

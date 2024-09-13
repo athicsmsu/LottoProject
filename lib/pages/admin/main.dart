@@ -67,8 +67,13 @@ class _MainAdminPageState extends State<MainAdminPage> {
                 size: 38.0,
               ), // ปุ่มที่อยู่ขวามือ
               onPressed: () {
-                // ฟังก์ชันเมื่อกดปุ่ม settings
-                print('Settings button pressed');
+               GetStorage storage = GetStorage();
+                storage.erase();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ));
               },
             ),
           ],
